@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Menu } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 function NavLinks() {
   return (
@@ -32,6 +32,9 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background border-l w-4/5">
+              <SheetHeader>
+                <SheetTitle className="sr-only">Menu</SheetTitle>
+              </SheetHeader>
               <NavLinks />
             </SheetContent>
           </Sheet>
