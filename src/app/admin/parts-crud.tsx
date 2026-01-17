@@ -144,34 +144,32 @@ function PartForm({ part, dramas, onFinished }: { part?: Part, dramas: Drama[], 
             <FormItem className="flex flex-col">
               <FormLabel>Drama</FormLabel>
               <FormControl>
-                <>
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setIsPickerOpen(true)}
-                        className={cn(
-                            "w-full justify-between",
-                            !field.value && "text-muted-foreground"
-                        )}
-                        >
-                        {field.value
-                            ? dramas.find(
-                                (drama) => drama.id === field.value
-                            )?.title
-                            : "Pilih drama"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                    <DramaPickerDialog 
-                        isOpen={isPickerOpen}
-                        onClose={() => setIsPickerOpen(false)}
-                        dramas={dramas}
-                        currentDramaId={field.value}
-                        onSelectDrama={(dramaId) => {
-                            field.onChange(dramaId)
-                        }}
-                    />
-                </>
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsPickerOpen(true)}
+                    className={cn(
+                        "w-full justify-between",
+                        !field.value && "text-muted-foreground"
+                    )}
+                    >
+                    {field.value
+                        ? dramas.find(
+                            (drama) => drama.id === field.value
+                        )?.title
+                        : "Pilih drama"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
               </FormControl>
+              <DramaPickerDialog 
+                  isOpen={isPickerOpen}
+                  onClose={() => setIsPickerOpen(false)}
+                  dramas={dramas}
+                  currentDramaId={field.value}
+                  onSelectDrama={(dramaId) => {
+                      field.onChange(dramaId)
+                  }}
+              />
               <FormMessage />
             </FormItem>
           )}
