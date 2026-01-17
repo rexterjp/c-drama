@@ -1,64 +1,39 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-import { getDramas, getTrendingDramas, getGenres, getDramaById } from '@/lib/data';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { getDramas, getTrendingDramas, getGenres } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Skeleton } from '@/components/ui/skeleton';
-import StarIcon from '@/components/icons/star-icon';
 import DramaCard from '@/components/drama-card';
 import GenreFilters from '@/components/genre-filters';
-import { ArrowRight } from 'lucide-react';
+import InstagramIcon from '@/components/icons/instagram-icon';
+import WhatsAppIcon from '@/components/icons/whatsapp-icon';
 
 function Hero() {
-  const heroDrama = getDramaById('1');
-  if (!heroDrama) return null;
-
-  const heroImage = PlaceHolderImages.find(img => img.id === heroDrama.posterId);
-
   return (
     <section className="w-full">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-            <div className="md:order-last">
-            {heroImage && (
-                <Image
-                src={heroImage.imageUrl}
-                alt={heroDrama.title}
-                width={600}
-                height={900}
-                className="object-cover rounded-lg shadow-lg w-full h-auto"
-                priority
-                data-ai-hint={heroImage.imageHint}
-                />
-            )}
-            </div>
-            <div>
-                <h1 className="font-headline text-4xl md:text-6xl font-bold text-foreground leading-tight">
-                    {heroDrama.title}
-                </h1>
-                <div className="flex items-center gap-4 my-6">
-                    <div className="flex items-center gap-1">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                        <StarIcon key={i} className={`w-6 h-6 ${i < heroDrama.rating ? 'text-secondary' : 'text-muted-foreground/50'}`} />
-                        ))}
-                    </div>
-                    <p className="text-foreground font-bold text-lg">{heroDrama.rating.toFixed(1)}</p>
-                </div>
-                <p className="text-muted-foreground text-lg mb-8 leading-relaxed max-w-prose">
-                    {heroDrama.synopsis}
-                </p>
-                
-                <Button asChild size="lg" className="h-12 text-lg rounded-full">
-                    <Link href={`/dramas/${heroDrama.id}`}>
-                        Watch Now
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                </Button>
-            </div>
+      <div className="container mx-auto px-4 py-16 md:py-32 text-center">
+        <h1 className="font-headline text-4xl md:text-6xl font-bold text-foreground leading-tight mb-4">
+          Welcome to C-Pop Now
+        </h1>
+        <p className="text-muted-foreground text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+          This platform is a personal project by <span className="text-foreground font-semibold">Candra Pramudya Arunit</span>, created to share the best of Chinese dramas with the world.
+        </p>
+        <div className="flex justify-center gap-4">
+          <Button asChild size="lg" className="h-12 text-lg rounded-full" variant="outline">
+            <Link href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+              <InstagramIcon className="mr-2 h-5 w-5" />
+              Instagram
+            </Link>
+          </Button>
+          <Button asChild size="lg" className="h-12 text-lg rounded-full">
+            <Link href="https://wa.me" target="_blank" rel="noopener noreferrer">
+              <WhatsAppIcon className="mr-2 h-5 w-5" />
+              WhatsApp
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
