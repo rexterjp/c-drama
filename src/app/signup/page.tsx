@@ -16,8 +16,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 
 const signupSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address.' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  email: z.string().email({ message: 'Alamat email tidak valid.' }),
+  password: z.string().min(6, { message: 'Kata sandi minimal 6 karakter.' }),
 });
 
 export default function SignupPage() {
@@ -39,14 +39,14 @@ export default function SignupPage() {
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
       toast({
-        title: 'Account Created',
-        description: 'You have been successfully signed up. Redirecting to admin...',
+        title: 'Akun Dibuat',
+        description: 'Anda telah berhasil mendaftar. Mengarahkan ke admin...',
       });
       router.push('/admin');
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Signup Failed',
+        title: 'Gagal Mendaftar',
         description: error.message,
       });
     } finally {
@@ -58,8 +58,8 @@ export default function SignupPage() {
     <div className="container mx-auto flex min-h-[calc(100vh-13rem)] items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Create Admin Account</CardTitle>
-          <CardDescription>Enter your details to create an account.</CardDescription>
+          <CardTitle className="text-2xl">Buat Akun Admin</CardTitle>
+          <CardDescription>Masukkan detail Anda untuk membuat akun.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -82,7 +82,7 @@ export default function SignupPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Kata Sandi</FormLabel>
                     <FormControl>
                       <Input type="password" placeholder="••••••••" {...field} />
                     </FormControl>
@@ -91,14 +91,14 @@ export default function SignupPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating Account...' : 'Sign Up'}
+                {isLoading ? 'Membuat Akun...' : 'Daftar'}
               </Button>
             </form>
           </Form>
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
+            Sudah punya akun?{' '}
             <Link href="/login" className="font-semibold text-primary hover:underline">
-              Login
+              Masuk
             </Link>
           </p>
         </CardContent>

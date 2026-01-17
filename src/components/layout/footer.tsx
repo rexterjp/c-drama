@@ -7,16 +7,16 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="text-center sm:text-left">
             <p className="font-headline text-xl font-bold text-foreground">C-Pop Now</p>
-            <p className="text-sm">Your portal to the best Chinese dramas.</p>
+            <p className="text-sm">Portal Anda untuk drama China terbaik.</p>
           </div>
           <div className="flex gap-6">
-            <Link href="/" className="text-sm hover:underline hover:text-foreground">Home</Link>
-            <Link href="/request" className="text-sm hover:underline hover:text-foreground">Request</Link>
-            <Link href="#" className="text-sm hover:underline hover:text-foreground">Contact</Link>
+            <Link href="/" className="text-sm hover:underline hover:text-foreground">Beranda</Link>
+            <Link href="/request" className="text-sm hover:underline hover:text-foreground">Permintaan</Link>
+            <Link href="#" className="text-sm hover:underline hover:text-foreground">Kontak</Link>
           </div>
         </div>
         <div className="text-center mt-8 border-t pt-8">
-          <p className="text-sm">&copy; {new Date().getFullYear()} C-Pop Now. All Rights Reserved.</p>
+          <p className="text-sm">&copy; {new Date().getFullYear()} C-Pop Now. Hak Cipta Dilindungi.</p>
         </div>
       </div>
     </footer>

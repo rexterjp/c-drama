@@ -56,7 +56,7 @@ export default function DramaDetailPage() {
             <div className="rounded-lg overflow-hidden shadow-lg">
               <Image
                 src={drama.posterUrl}
-                alt={`Poster for ${drama.title}`}
+                alt={`Poster untuk ${drama.title}`}
                 width={400}
                 height={600}
                 className="w-full h-auto"
@@ -69,7 +69,7 @@ export default function DramaDetailPage() {
           <h1 className="font-headline text-4xl md:text-5xl font-bold mb-8">{drama.title}</h1>
 
           <div>
-            <h2 className="font-headline text-3xl font-bold mb-4">Episodes</h2>
+            <h2 className="font-headline text-3xl font-bold mb-4">Episode</h2>
             {episodes && episodes.length > 0 ? (
               <Accordion type="single" collapsible className="w-full">
                 {episodes
@@ -98,7 +98,7 @@ export default function DramaDetailPage() {
               </Accordion>
             ) : (
               <div className="border-dashed border-2 rounded-lg p-8 text-center">
-                <p className="text-muted-foreground">No episodes available yet.</p>
+                <p className="text-muted-foreground">Belum ada episode yang tersedia.</p>
               </div>
             )}
           </div>

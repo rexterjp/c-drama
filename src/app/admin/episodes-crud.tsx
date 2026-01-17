@@ -22,12 +22,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 
 const episodeSchema = z.object({
-  dramaId: z.string().min(1, 'Drama is required'),
-  episodeNumber: z.coerce.number().min(1, 'Episode number must be at least 1'),
-  title: z.string().min(1, 'Title is required'),
-  videoUrl: z.string().url('Must be a valid URL'),
-  duration: z.string().min(1, 'Duration is required'),
-  description: z.string().min(1, 'Description is required'),
+  dramaId: z.string().min(1, 'Drama harus diisi'),
+  episodeNumber: z.coerce.number().min(1, 'Nomor episode minimal 1'),
+  title: z.string().min(1, 'Judul harus diisi'),
+  videoUrl: z.string().url('Harus berupa URL yang valid'),
+  duration: z.string().min(1, 'Durasi harus diisi'),
+  description: z.string().min(1, 'Deskripsi harus diisi'),
 });
 
 function EpisodeForm({ episode, dramas, onFinished }: { episode?: Episode, dramas: Drama[], onFinished: () => void }) {
@@ -52,14 +52,14 @@ function EpisodeForm({ episode, dramas, onFinished }: { episode?: Episode, drama
       if (episode) {
         const episodeRef = doc(firestore, 'episodes', episode.id);
         updateDocumentNonBlocking(episodeRef, values);
-        toast({ title: 'Episode Updated', description: `Episode ${values.episodeNumber} has been updated.` });
+        toast({ title: 'Episode Diperbarui', description: `Episode ${values.episodeNumber} telah diperbarui.` });
       } else {
         addDocumentNonBlocking(episodesCollection, values);
-        toast({ title: 'Episode Created', description: `Episode ${values.episodeNumber} has been created.` });
+        toast({ title: 'Episode Dibuat', description: `Episode ${values.episodeNumber} telah dibuat.` });
       }
       onFinished();
     } catch (e: any) {
-      toast({ variant: 'destructive', title: 'Error', description: e.message });
+      toast({ variant: 'destructive', title: 'Kesalahan', description: e.message });
     }
   }
   
@@ -70,7 +70,7 @@ function EpisodeForm({ episode, dramas, onFinished }: { episode?: Episode, drama
             <FormItem>
                 <FormLabel>Drama</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl><SelectTrigger><SelectValue placeholder="Select a drama" /></SelectTrigger></FormControl>
+                    <FormControl><SelectTrigger><SelectValue placeholder="Pilih drama" /></SelectTrigger></FormControl>
                     <SelectContent>
                         {dramas.map((drama) => <SelectItem key={drama.id} value={drama.id}>{drama.title}</SelectItem>)}
                     </SelectContent>
@@ -79,23 +79,23 @@ function EpisodeForm({ episode, dramas, onFinished }: { episode?: Episode, drama
             </FormItem>
         )}/>
         <FormField control={form.control} name="episodeNumber" render={({ field }) => (
-          <FormItem><FormLabel>Episode Number</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>Nomor Episode</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <FormField control={form.control} name="title" render={({ field }) => (
-          <FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>Judul</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <FormField control={form.control} name="videoUrl" render={({ field }) => (
-          <FormItem><FormLabel>Video URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>URL Video</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <FormField control={form.control} name="duration" render={({ field }) => (
-          <FormItem><FormLabel>Duration (e.g., 45min)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>Durasi (cth: 45mnt)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <FormField control={form.control} name="description" render={({ field }) => (
-          <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>Deskripsi</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <DialogFooter className="sticky bottom-0 bg-background pt-4">
-          <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
-          <Button type="submit">Save</Button>
+          <DialogClose asChild><Button variant="ghost">Batal</Button></DialogClose>
+          <Button type="submit">Simpan</Button>
         </DialogFooter>
       </form>
     </Form>
@@ -132,7 +132,7 @@ export default function EpisodesCrud() {
   const handleDelete = (episode: Episode) => {
     const episodeRef = doc(firestore, 'episodes', episode.id);
     deleteDocumentNonBlocking(episodeRef);
-    toast({ title: 'Episode Deleted', description: `Episode ${episode.episodeNumber} has been deleted.` });
+    toast({ title: 'Episode Dihapus', description: `Episode ${episode.episodeNumber} telah dihapus.` });
   };
   
   const onFormFinished = () => {
@@ -152,13 +152,13 @@ export default function EpisodesCrud() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Manage Episodes</h2>
+        <h2 className="text-2xl font-bold">Kelola Episode</h2>
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
-                <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Add New Episode</Button>
+                <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Episode Baru</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-2xl">
-                <DialogHeader><DialogTitle>{editingEpisode ? 'Edit Episode' : 'Add New Episode'}</DialogTitle></DialogHeader>
+                <DialogHeader><DialogTitle>{editingEpisode ? 'Ubah Episode' : 'Tambah Episode Baru'}</DialogTitle></DialogHeader>
                 <EpisodeForm episode={editingEpisode} dramas={dramas || []} onFinished={onFormFinished} />
             </DialogContent>
         </Dialog>
@@ -170,15 +170,15 @@ export default function EpisodesCrud() {
             <TableRow>
               <TableHead>Drama</TableHead>
               <TableHead>Ep #</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Duration</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Judul</TableHead>
+              <TableHead>Durasi</TableHead>
+              <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {episodes && episodes.length > 0 ? episodes.sort((a,b) => a.episodeNumber - b.episodeNumber).map((episode) => (
               <TableRow key={episode.id}>
-                <TableCell className="font-medium">{dramaTitleMap.get(episode.dramaId) || 'Unknown Drama'}</TableCell>
+                <TableCell className="font-medium">{dramaTitleMap.get(episode.dramaId) || 'Drama Tidak Dikenal'}</TableCell>
                 <TableCell>{episode.episodeNumber}</TableCell>
                 <TableCell>{episode.title}</TableCell>
                 <TableCell>{episode.duration}</TableCell>
@@ -191,14 +191,14 @@ export default function EpisodesCrud() {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                           <AlertDialogHeader>
-                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                               <AlertDialogDescription>
-                                  This action cannot be undone. This will permanently delete episode {episode.episodeNumber} of "{dramaTitleMap.get(episode.dramaId)}".
+                                  Tindakan ini tidak dapat dibatalkan. Ini akan menghapus episode {episode.episodeNumber} dari "{dramaTitleMap.get(episode.dramaId)}" secara permanen.
                               </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(episode)}>Delete</AlertDialogAction>
+                              <AlertDialogCancel>Batal</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDelete(episode)}>Hapus</AlertDialogAction>
                           </AlertDialogFooter>
                       </AlertDialogContent>
                   </AlertDialog>
@@ -206,7 +206,7 @@ export default function EpisodesCrud() {
               </TableRow>
             )) : (
                 <TableRow>
-                    <TableCell colSpan={5} className="text-center">No episodes found.</TableCell>
+                    <TableCell colSpan={5} className="text-center">Tidak ada episode ditemukan.</TableCell>
                 </TableRow>
             )}
           </TableBody>

@@ -21,10 +21,10 @@ function Hero() {
     <section className="w-full">
       <div className="container mx-auto px-4 py-16 md:py-32 text-center">
         <h1 className="font-headline text-4xl md:text-6xl font-bold text-foreground leading-tight mb-4">
-          Welcome to C-Pop Now
+          Selamat Datang di C-Pop Now
         </h1>
         <p className="text-muted-foreground text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-          This platform is a personal project by <span className="text-foreground font-semibold">Candra Pramudya Arunita</span>, created to share the best of Chinese dramas with the world.
+          Platform ini adalah proyek pribadi oleh <span className="text-foreground font-semibold">Candra Pramudya Arunita</span>, dibuat untuk membagikan drama China terbaik kepada dunia.
         </p>
         <div className="flex justify-center gap-4">
           <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#E4405F] hover:bg-[#E4405F]/90 text-white">
@@ -57,7 +57,7 @@ function TrendingDramas() {
     return (
       <section className="py-8 md:py-12">
         <div className="container mx-auto px-4">
-          <h2 className="font-headline text-3xl md:text-4xl font-bold mb-6">Trending Now</h2>
+          <h2 className="font-headline text-3xl md:text-4xl font-bold mb-6">Sedang Tren</h2>
           <div className="flex space-x-4 -ml-4">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="basis-1/2 md:basis-1/3 lg:basis-1/5 pl-4">
@@ -74,7 +74,7 @@ function TrendingDramas() {
   return (
     <section className="py-8 md:py-12">
       <div className="container mx-auto px-4">
-        <h2 className="font-headline text-3xl md:text-4xl font-bold mb-6">Trending Now</h2>
+        <h2 className="font-headline text-3xl md:text-4xl font-bold mb-6">Sedang Tren</h2>
         <Carousel
           opts={{
             align: 'start',
@@ -171,11 +171,11 @@ export default function Home() {
 
       <section className="container mx-auto px-4 py-8 md:py-12">
         <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
-            <h2 className="font-headline text-3xl md:text-4xl font-bold">All Dramas</h2>
+            <h2 className="font-headline text-3xl md:text-4xl font-bold">Semua Drama</h2>
             <div className="relative w-full max-w-sm">
                 <Input
                     type="search"
-                    placeholder="Search dramas..."
+                    placeholder="Cari drama..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 h-12 rounded-full shadow-sm bg-background"
@@ -193,8 +193,8 @@ export default function Home() {
             <div className="border-dashed border-2 rounded-lg p-8 text-center mt-4">
               <p className="text-muted-foreground">
                 {searchQuery
-                  ? 'No dramas found matching your search.'
-                  : 'No dramas available yet. Add data to your Firestore "dramas" collection.'
+                  ? 'Tidak ada drama yang cocok dengan pencarian Anda.'
+                  : 'Belum ada drama yang tersedia. Tambahkan data ke koleksi "dramas" Firestore Anda.'
                 }
               </p>
             </div>
@@ -204,13 +204,13 @@ export default function Home() {
         {totalPages > 1 && (
             <div className="flex justify-center items-center gap-4 mt-8">
                 <Button onClick={handlePrevPage} disabled={currentPage === 1}>
-                    Previous
+                    Sebelumnya
                 </Button>
                 <span className="text-muted-foreground font-medium">
-                    Page {currentPage} of {totalPages}
+                    Halaman {currentPage} dari {totalPages}
                 </span>
                 <Button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    Next
+                    Berikutnya
                 </Button>
             </div>
         )}

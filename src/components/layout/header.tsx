@@ -23,8 +23,8 @@ import {
 function NavLinks({ onLinkClick }: { onLinkClick?: () => void }) {
   return (
     <>
-      <Link href="/" className="font-semibold text-lg md:text-base hover:underline" onClick={onLinkClick}>Home</Link>
-      <Link href="/request" className="font-semibold text-lg md:text-base hover:underline" onClick={onLinkClick}>Request</Link>
+      <Link href="/" className="font-semibold text-lg md:text-base hover:underline" onClick={onLinkClick}>Beranda</Link>
+      <Link href="/request" className="font-semibold text-lg md:text-base hover:underline" onClick={onLinkClick}>Permintaan</Link>
     </>
   );
 }
@@ -71,12 +71,12 @@ export default function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => router.push('/admin')}>
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
+              <span>Dasbor</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
+              <span>Keluar</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -86,7 +86,7 @@ export default function Header() {
       <Button asChild variant="ghost" className="hidden md:flex">
         <Link href="/login">
           <LogIn className="mr-2 h-4 w-4"/>
-          Login
+          Masuk
         </Link>
       </Button>
     );
@@ -113,7 +113,7 @@ export default function Header() {
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <Menu className="h-6 w-6" />
-                  <span className="sr-only">Open menu</span>
+                  <span className="sr-only">Buka menu</span>
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="bg-background border-l w-4/5">
@@ -126,13 +126,13 @@ export default function Header() {
                     {user ? (
                       <div className="space-y-4">
                         <Button asChild className="w-full" onClick={() => {router.push('/admin'); setIsSheetOpen(false);}}>
-                           <Link href="/admin">Dashboard</Link>
+                           <Link href="/admin">Dasbor</Link>
                         </Button>
-                        <Button variant="outline" className="w-full" onClick={() => {handleLogout(); setIsSheetOpen(false);}}>Logout</Button>
+                        <Button variant="outline" className="w-full" onClick={() => {handleLogout(); setIsSheetOpen(false);}}>Keluar</Button>
                       </div>
                     ) : !isUserLoading ? (
                       <Button asChild className="w-full" onClick={() => setIsSheetOpen(false)}>
-                        <Link href="/login">Login</Link>
+                        <Link href="/login">Masuk</Link>
                       </Button>
                     ) : null}
                   </div>

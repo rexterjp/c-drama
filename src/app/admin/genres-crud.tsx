@@ -20,7 +20,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 
 const genreSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Nama harus diisi'),
 });
 
 function GenreForm({ genre, onFinished }: { genre?: Genre, onFinished: () => void }) {
@@ -38,14 +38,14 @@ function GenreForm({ genre, onFinished }: { genre?: Genre, onFinished: () => voi
       if (genre) {
         const genreRef = doc(firestore, 'genres', genre.id);
         updateDocumentNonBlocking(genreRef, values);
-        toast({ title: 'Genre Updated', description: `${values.name} has been updated.` });
+        toast({ title: 'Genre Diperbarui', description: `${values.name} telah diperbarui.` });
       } else {
         addDocumentNonBlocking(genresCollection, values);
-        toast({ title: 'Genre Created', description: `${values.name} has been created.` });
+        toast({ title: 'Genre Dibuat', description: `${values.name} telah dibuat.` });
       }
       onFinished();
     } catch (e: any) {
-      toast({ variant: 'destructive', title: 'Error', description: e.message });
+      toast({ variant: 'destructive', title: 'Kesalahan', description: e.message });
     }
   }
 
@@ -53,11 +53,11 @@ function GenreForm({ genre, onFinished }: { genre?: Genre, onFinished: () => voi
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField control={form.control} name="name" render={({ field }) => (
-          <FormItem><FormLabel>Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>Nama</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <DialogFooter>
-          <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
-          <Button type="submit">Save</Button>
+          <DialogClose asChild><Button variant="ghost">Batal</Button></DialogClose>
+          <Button type="submit">Simpan</Button>
         </DialogFooter>
       </form>
     </Form>
@@ -86,7 +86,7 @@ export default function GenresCrud() {
   const handleDelete = (genre: Genre) => {
     const genreRef = doc(firestore, 'genres', genre.id);
     deleteDocumentNonBlocking(genreRef);
-    toast({ title: 'Genre Deleted', description: `${genre.name} has been deleted. Note: This does not remove the genre from existing dramas.` });
+    toast({ title: 'Genre Dihapus', description: `${genre.name} telah dihapus. Catatan: Ini tidak menghapus genre dari drama yang ada.` });
   };
   
   const onFormFinished = () => {
@@ -106,13 +106,13 @@ export default function GenresCrud() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Manage Genres</h2>
+        <h2 className="text-2xl font-bold">Kelola Genre</h2>
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
-                <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Add New Genre</Button>
+                <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Genre Baru</Button>
             </DialogTrigger>
             <DialogContent>
-                <DialogHeader><DialogTitle>{editingGenre ? 'Edit Genre' : 'Add New Genre'}</DialogTitle></DialogHeader>
+                <DialogHeader><DialogTitle>{editingGenre ? 'Ubah Genre' : 'Tambah Genre Baru'}</DialogTitle></DialogHeader>
                 <GenreForm genre={editingGenre} onFinished={onFormFinished} />
             </DialogContent>
         </Dialog>
@@ -122,8 +122,8 @@ export default function GenresCrud() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Nama</TableHead>
+              <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -138,14 +138,14 @@ export default function GenresCrud() {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                           <AlertDialogHeader>
-                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                               <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete the genre "{genre.name}". This will not remove the genre from dramas that already use it.
+                                Tindakan ini tidak dapat dibatalkan. Ini akan menghapus genre "{genre.name}" secara permanen. Ini tidak akan menghapus genre dari drama yang sudah menggunakannya.
                               </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(genre)}>Delete</AlertDialogAction>
+                              <AlertDialogCancel>Batal</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDelete(genre)}>Hapus</AlertDialogAction>
                           </AlertDialogFooter>
                       </AlertDialogContent>
                   </AlertDialog>
@@ -153,7 +153,7 @@ export default function GenresCrud() {
               </TableRow>
             )) : (
                 <TableRow>
-                    <TableCell colSpan={2} className="text-center">No genres found.</TableCell>
+                    <TableCell colSpan={2} className="text-center">Tidak ada genre ditemukan.</TableCell>
                 </TableRow>
             )}
           </TableBody>

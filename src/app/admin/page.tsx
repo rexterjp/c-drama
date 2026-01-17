@@ -25,15 +25,15 @@ function AdminDashboard() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="font-headline text-4xl font-bold">Admin Dashboard</h1>
-        <Button onClick={handleLogout} variant="outline">Logout</Button>
+        <h1 className="font-headline text-4xl font-bold">Dasbor Admin</h1>
+        <Button onClick={handleLogout} variant="outline">Keluar</Button>
       </div>
       
       <Tabs defaultValue="dramas" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="dramas">Dramas</TabsTrigger>
-          <TabsTrigger value="genres">Genres</TabsTrigger>
-          <TabsTrigger value="episodes">Episodes</TabsTrigger>
+          <TabsTrigger value="dramas">Drama</TabsTrigger>
+          <TabsTrigger value="genres">Genre</TabsTrigger>
+          <TabsTrigger value="episodes">Episode</TabsTrigger>
         </TabsList>
         <TabsContent value="dramas" className="mt-6">
           <DramasCrud />

@@ -16,8 +16,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 
 const loginSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address.' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  email: z.string().email({ message: 'Alamat email tidak valid.' }),
+  password: z.string().min(6, { message: 'Kata sandi minimal 6 karakter.' }),
 });
 
 export default function LoginPage() {
@@ -42,7 +42,7 @@ export default function LoginPage() {
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Login Failed',
+        title: 'Gagal Masuk',
         description: error.message,
       });
     } finally {
@@ -54,8 +54,8 @@ export default function LoginPage() {
     <div className="container mx-auto flex min-h-[calc(100vh-13rem)] items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Admin Login</CardTitle>
-          <CardDescription>Enter your credentials to access the dashboard.</CardDescription>
+          <CardTitle className="text-2xl">Login Admin</CardTitle>
+          <CardDescription>Masukkan kredensial Anda untuk mengakses dasbor.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -78,7 +78,7 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Kata Sandi</FormLabel>
                     <FormControl>
                       <Input type="password" placeholder="••••••••" {...field} />
                     </FormControl>
@@ -87,14 +87,14 @@ export default function LoginPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Login'}
+                {isLoading ? 'Masuk...' : 'Masuk'}
               </Button>
             </form>
           </Form>
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Don't have an account?{' '}
+            Belum punya akun?{' '}
             <Link href="/signup" className="font-semibold text-primary hover:underline">
-              Sign up
+              Daftar
             </Link>
           </p>
         </CardContent>

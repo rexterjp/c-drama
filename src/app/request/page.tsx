@@ -7,10 +7,10 @@ export default function RequestPage() {
   return (
     <div className="container mx-auto px-4 py-16 md:py-24 text-center">
       <h1 className="font-headline text-4xl md:text-5xl font-bold text-foreground mb-4">
-        Request a Drama
+        Minta Drama
       </h1>
       <p className="text-muted-foreground text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-        Can't find your favorite Chinese drama? Let us know! Reach out directly via social media to make a request. We're always looking to expand our collection based on community feedback.
+        Tidak dapat menemukan drama China favorit Anda? Beri tahu kami! Hubungi langsung melalui media sosial untuk mengajukan permintaan. Kami selalu ingin memperluas koleksi kami berdasarkan masukan komunitas.
       </p>
       <div className="flex flex-wrap justify-center gap-4">
         <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#E4405F] hover:bg-[#E4405F]/90 text-white">

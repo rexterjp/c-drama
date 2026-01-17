@@ -22,8 +22,8 @@ import { useToast } from '@/hooks/use-toast';
 
 
 const dramaSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  posterUrl: z.string().min(1, 'Poster URL is required'),
+  title: z.string().min(1, 'Judul harus diisi'),
+  posterUrl: z.string().min(1, 'URL Poster harus diisi'),
   isTrending: z.boolean().default(false),
   isHot: z.boolean().default(false),
 });
@@ -56,14 +56,14 @@ function DramaForm({ drama, onFinished }: { drama?: Drama, onFinished: () => voi
       if (drama) {
         const dramaRef = doc(firestore, 'dramas', drama.id);
         updateDocumentNonBlocking(dramaRef, submittedValues);
-        toast({ title: 'Drama Updated', description: `${submittedValues.title} has been updated.` });
+        toast({ title: 'Drama Diperbarui', description: `${submittedValues.title} telah diperbarui.` });
       } else {
         addDocumentNonBlocking(dramasCollection, submittedValues);
-        toast({ title: 'Drama Created', description: `${submittedValues.title} has been created.` });
+        toast({ title: 'Drama Dibuat', description: `${submittedValues.title} telah dibuat.` });
       }
       onFinished();
     } catch (e: any) {
-      toast({ variant: 'destructive', title: 'Error', description: e.message });
+      toast({ variant: 'destructive', title: 'Kesalahan', description: e.message });
     }
   }
 
@@ -71,29 +71,29 @@ function DramaForm({ drama, onFinished }: { drama?: Drama, onFinished: () => voi
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto p-1">
         <FormField control={form.control} name="title" render={({ field }) => (
-          <FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>Judul</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <FormField control={form.control} name="posterUrl" render={({ field }) => (
-          <FormItem><FormLabel>Poster URL (imgbb)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+          <FormItem><FormLabel>URL Poster (imgbb)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <div className="flex gap-8">
             <FormField control={form.control} name="isTrending" render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm space-x-4">
-                <FormLabel>Trending</FormLabel>
+                <FormLabel>Tren</FormLabel>
                 <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
             </FormItem>
             )} />
             <FormField control={form.control} name="isHot" render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm space-x-4">
-                <FormLabel>Hot</FormLabel>
+                <FormLabel>Populer</FormLabel>
                 <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
             </FormItem>
             )} />
         </div>
         
         <DialogFooter className="sticky bottom-0 bg-background pt-4">
-          <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
-          <Button type="submit">Save</Button>
+          <DialogClose asChild><Button variant="ghost">Batal</Button></DialogClose>
+          <Button type="submit">Simpan</Button>
         </DialogFooter>
       </form>
     </Form>
@@ -123,7 +123,7 @@ export default function DramasCrud() {
   const handleDelete = (drama: Drama) => {
     const dramaRef = doc(firestore, 'dramas', drama.id);
     deleteDocumentNonBlocking(dramaRef);
-    toast({ title: 'Drama Deleted', description: `${drama.title} has been deleted.` });
+    toast({ title: 'Drama Dihapus', description: `${drama.title} telah dihapus.` });
   };
   
   const onFormFinished = () => {
@@ -143,14 +143,14 @@ export default function DramasCrud() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Manage Dramas</h2>
+        <h2 className="text-2xl font-bold">Kelola Drama</h2>
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
-                <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Add New Drama</Button>
+                <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Drama Baru</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>{editingDrama ? 'Edit Drama' : 'Add New Drama'}</DialogTitle>
+                    <DialogTitle>{editingDrama ? 'Ubah Drama' : 'Tambah Drama Baru'}</DialogTitle>
                 </DialogHeader>
                 <DramaForm drama={editingDrama} onFinished={onFormFinished} />
             </DialogContent>
@@ -161,18 +161,18 @@ export default function DramasCrud() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Trending</TableHead>
-              <TableHead>Hot</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Judul</TableHead>
+              <TableHead>Tren</TableHead>
+              <TableHead>Populer</TableHead>
+              <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {dramas && dramas.length > 0 ? dramas.map((drama) => (
               <TableRow key={drama.id}>
                 <TableCell className="font-medium">{drama.title}</TableCell>
-                <TableCell>{drama.isTrending ? 'Yes' : 'No'}</TableCell>
-                <TableCell>{drama.isHot ? 'Yes' : 'No'}</TableCell>
+                <TableCell>{drama.isTrending ? 'Ya' : 'Tidak'}</TableCell>
+                <TableCell>{drama.isHot ? 'Ya' : 'Tidak'}</TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="icon" onClick={() => handleEdit(drama)}><Edit className="h-4 w-4" /></Button>
                   
@@ -182,14 +182,14 @@ export default function DramasCrud() {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                           <AlertDialogHeader>
-                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                               <AlertDialogDescription>
-                                  This action cannot be undone. This will permanently delete the drama "{drama.title}".
+                                  Tindakan ini tidak dapat dibatalkan. Ini akan menghapus drama "{drama.title}" secara permanen.
                               </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(drama)}>Delete</AlertDialogAction>
+                              <AlertDialogCancel>Batal</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDelete(drama)}>Hapus</AlertDialogAction>
                           </AlertDialogFooter>
                       </AlertDialogContent>
                   </AlertDialog>
@@ -197,7 +197,7 @@ export default function DramasCrud() {
               </TableRow>
             )) : (
                 <TableRow>
-                    <TableCell colSpan={4} className="text-center">No dramas found.</TableCell>
+                    <TableCell colSpan={4} className="text-center">Tidak ada drama ditemukan.</TableCell>
                 </TableRow>
             )}
           </TableBody>
