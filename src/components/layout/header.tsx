@@ -5,19 +5,12 @@ import { Menu } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { getGenres } from '@/lib/data';
 
 function NavLinks() {
-  const genres = getGenres();
   return (
-    <nav className="flex flex-col gap-4 p-4">
-      <Link href="/" className="font-bold hover:underline">Home</Link>
-      <h3 className="font-semibold text-lg">Genres</h3>
-      {genres.map(genre => (
-        <Link key={genre} href={`/genre/${genre.toLowerCase()}`} className="text-muted-foreground hover:text-foreground hover:underline">
-          {genre}
-        </Link>
-      ))}
+    <nav className="flex flex-col gap-6 p-4 mt-8">
+      <Link href="/" className="font-bold text-2xl hover:underline">Home</Link>
+      <Link href="/request" className="font-bold text-2xl hover:underline">Request</Link>
     </nav>
   );
 }
@@ -46,7 +39,7 @@ export default function Header() {
 
         <nav className="hidden md:flex items-center gap-6">
           <Link href="/" className="font-semibold hover:underline">Home</Link>
-          <Link href="/dramas" className="font-semibold hover:underline">All Dramas</Link>
+          <Link href="/request" className="font-semibold hover:underline">Request</Link>
         </nav>
       </div>
     </header>
