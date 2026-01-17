@@ -1,3 +1,64 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "poster-1",
+      "description": "Poster for The Untamed",
+      "imageUrl": "https://images.unsplash.com/photo-1550100136-e092101726f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYW50YXN5JTIwbGFuZHNjYXBlfGVufDB8fHx8MTc2ODUyOTMxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fantasy landscape"
+    },
+    {
+      "id": "poster-2",
+      "description": "Poster for Ashes of Love",
+      "imageUrl": "https://images.unsplash.com/photo-1718981929047-10a948ce2d32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjZWxlc3RpYWwlMjBmbG93ZXJzfGVufDB8fHx8MTc2ODYwNTg0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "celestial flowers"
+    },
+    {
+      "id": "poster-3",
+      "description": "Poster for Go Go Squid!",
+      "imageUrl": "https://images.unsplash.com/photo-1541423408854-5df732b6f6d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjaXR5JTIwc2t5bGluZXxlbnwwfHx8fDE3Njg2MTc2MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city skyline"
+    },
+    {
+      "id": "poster-4",
+      "description": "Poster for The King's Avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1675326570919-946d728e9a25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmdXR1cmlzdGljJTIwY2l0eXxlbnwwfHx8fDE3Njg1NTM4OTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "futuristic city"
+    },
+    {
+      "id": "poster-5",
+      "description": "Poster for Love O2O",
+      "imageUrl": "https://images.unsplash.com/photo-1559135197-8a45ea74d367?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx1bml2ZXJzaXR5JTIwY2FtcHVzfGVufDB8fHx8MTc2ODU2NzU4Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "university campus"
+    },
+    {
+      "id": "poster-6",
+      "description": "Poster for Eternal Love",
+      "imageUrl": "https://images.unsplash.com/photo-1764278967015-ae5550cdda25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxteXRoaWNhbCUyMGZvcmVzdHxlbnwwfHx8fDE3Njg2MzM4MjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mythical forest"
+    },
+    {
+      "id": "poster-7",
+      "description": "Poster for Nirvana in Fire",
+      "imageUrl": "https://images.unsplash.com/photo-1599487958774-befb148c190a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhbmNpZW50JTIwcGFsYWNlfGVufDB8fHx8MTc2ODYwNTg0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ancient palace"
+    },
+    {
+      "id": "poster-8",
+      "description": "Poster for The Story of Minglan",
+      "imageUrl": "https://images.unsplash.com/photo-1762115331520-fad3d16f246a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dHJhZGl0aW9uYWwlMjBwYWludGluZ3xlbnwwfHx8fDE3Njg2MzM4MjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "traditional painting"
+    },
+    {
+      "id": "poster-9",
+      "description": "Poster for Joy of Life",
+      "imageUrl": "https://images.unsplash.com/photo-1661006098770-8bdc80e034e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyb3lhbCUyMGNvdXJ0fGVufDB8fHx8MTc2ODYzMzgyNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "royal court"
+    },
+    {
+      "id": "poster-10",
+      "description": "Poster for Hidden Love",
+      "imageUrl": "https://images.unsplash.com/photo-1597308011529-f634f4cab827?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjb3p5JTIwY2FmZXxlbnwwfHx8fDE3Njg1NzIwMTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cozy cafe"
+    }
+  ]
 }
