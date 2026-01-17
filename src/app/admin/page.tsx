@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import DramasCrud from './dramas-crud';
 import GenresCrud from './genres-crud';
-import EpisodesCrud from './episodes-crud';
+import PartsCrud from './parts-crud';
 
 function AdminDashboard() {
   const auth = useAuth();
@@ -42,7 +42,7 @@ function AdminDashboard() {
           <GenresCrud />
         </TabsContent>
         <TabsContent value="parts" className="mt-6">
-          <EpisodesCrud />
+          <PartsCrud />
         </TabsContent>
       </Tabs>
     </div>
