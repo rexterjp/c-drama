@@ -7,9 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type DramaCardProps = {
   drama: Drama;
+  priority?: boolean;
 };
 
-export default function DramaCard({ drama }: DramaCardProps) {
+export default function DramaCard({ drama, priority = false }: DramaCardProps) {
   if (!drama?.id) return null;
 
   const getCorrectedUrl = (url: string) => {
@@ -32,6 +33,7 @@ export default function DramaCard({ drama }: DramaCardProps) {
               fill
               className="object-cover"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
+              priority={priority}
             />
           )}
         </CardContent>

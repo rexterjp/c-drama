@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Montserrat } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -6,9 +7,16 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  display: 'swap',
+  variable: '--font-montserrat',
+});
+
 export const metadata: Metadata = {
   title: 'C-Drama',
-  description: 'Portal Anda untuk drama pendek terbaik.',
+  description: 'Portal Anda untuk drama pendek trending.',
 };
 
 export default function RootLayout({
@@ -17,12 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
-      </head>
+    <html lang="id" className={montserrat.variable}>
+      <head />
       <body className={cn('font-body antialiased flex flex-col min-h-screen')}>
         <FirebaseClientProvider>
           <Header />
