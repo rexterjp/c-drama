@@ -60,8 +60,8 @@ function TrendingDramas() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="ml-12" />
-          <CarouselNext className="mr-12" />
+          <CarouselPrevious />
+          <CarouselNext />
         </Carousel>
       </div>
     </section>
