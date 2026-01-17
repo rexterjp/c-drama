@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -18,7 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { PlusCircle, Edit, Trash2, Check, ChevronsUpDown } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, Check, ChevronsUpDown, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -204,6 +204,9 @@ export default function PartsCrud() {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingPart, setEditingPart] = useState<Part | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const partsCollection = useMemoFirebase(() => collection(firestore, 'parts'), [firestore]);
   const { data: parts, isLoading: partsLoading } = useCollection<Part>(partsCollection);
@@ -232,6 +235,27 @@ export default function PartsCrud() {
     return new Map([...groups.entries()].sort((a, b) => a[1].dramaTitle.localeCompare(b[1].dramaTitle)));
   }, [parts, dramas]);
   
+  const filteredDramaGroups = useMemo(() => {
+      if (!searchQuery) return Array.from(groupedParts.entries());
+
+      return Array.from(groupedParts.entries()).filter(([_, groupData]) => 
+          groupData.dramaTitle.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+  }, [groupedParts, searchQuery]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const totalPages = Math.ceil(filteredDramaGroups.length / itemsPerPage);
+
+  const paginatedDramaGroups = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredDramaGroups.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredDramaGroups, currentPage, itemsPerPage]);
+
+  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   const handleEdit = (part: Part) => {
     setEditingPart(part);
@@ -269,22 +293,34 @@ export default function PartsCrud() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
         <h2 className="text-2xl font-bold">Kelola Part</h2>
-        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-            <DialogTrigger asChild>
-                <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Part Baru</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-2xl">
-                <DialogHeader><DialogTitle>{editingPart ? 'Ubah Part' : 'Tambah Part Baru'}</DialogTitle></DialogHeader>
-                <PartForm part={editingPart} dramas={dramas || []} onFinished={onFormFinished} />
-            </DialogContent>
-        </Dialog>
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full md:w-auto">
+            <div className="relative w-full md:w-64">
+                <Input
+                    type="search"
+                    placeholder="Cari drama..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-10"
+                />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            </div>
+            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                <DialogTrigger asChild>
+                    <Button onClick={handleAddNew} className="w-full md:w-auto"><PlusCircle className="mr-2 h-4 w-4" /> Tambah Part Baru</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-2xl">
+                    <DialogHeader><DialogTitle>{editingPart ? 'Ubah Part' : 'Tambah Part Baru'}</DialogTitle></DialogHeader>
+                    <PartForm part={editingPart} dramas={dramas || []} onFinished={onFormFinished} />
+                </DialogContent>
+            </Dialog>
+        </div>
       </div>
       
-      {groupedParts.size > 0 ? (
+      {paginatedDramaGroups.length > 0 ? (
         <Accordion type="multiple" className="w-full space-y-4">
-            {Array.from(groupedParts.entries()).map(([dramaId, groupData]) => (
+            {paginatedDramaGroups.map(([dramaId, groupData]) => (
                 <AccordionItem value={dramaId} key={dramaId} className="border rounded-lg bg-card">
                     <AccordionTrigger className="px-4 py-3 text-lg font-semibold hover:no-underline">
                         {groupData.dramaTitle}
@@ -338,9 +374,23 @@ export default function PartsCrud() {
         </Accordion>
       ) : (
         <div className="border-dashed border-2 rounded-lg p-8 text-center mt-4">
-            <p className="text-muted-foreground">Tidak ada part ditemukan.</p>
+            <p className="text-muted-foreground">{searchQuery ? 'Tidak ada drama yang cocok dengan pencarian Anda.' : 'Tidak ada part ditemukan.'}</p>
         </div>
       )}
+
+    {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-8">
+            <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+                Sebelumnya
+            </Button>
+            <span className="text-muted-foreground font-medium">
+                Halaman {currentPage} dari {totalPages}
+            </span>
+            <Button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                Berikutnya
+            </Button>
+        </div>
+    )}
     </div>
   );
 }

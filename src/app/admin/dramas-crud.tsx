@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -16,7 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { PlusCircle, Edit, Trash2 } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, Search } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 
@@ -106,9 +106,34 @@ export default function DramasCrud() {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingDrama, setEditingDrama] = useState<Drama | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const dramasCollection = useMemoFirebase(() => collection(firestore, 'dramas'), [firestore]);
   const { data: dramas, isLoading: dramasLoading } = useCollection<Drama>(dramasCollection);
+
+  const filteredDramas = useMemo(() => {
+    if (!dramas) return [];
+    if (!searchQuery) return dramas;
+    return dramas.filter((drama) =>
+      drama.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [dramas, searchQuery]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const totalPages = Math.ceil(filteredDramas.length / itemsPerPage);
+
+  const paginatedDramas = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredDramas.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredDramas, currentPage, itemsPerPage]);
+
+  const handlePrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   const handleEdit = (drama: Drama) => {
     setEditingDrama(drama);
@@ -142,19 +167,31 @@ export default function DramasCrud() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
         <h2 className="text-2xl font-bold">Kelola Drama</h2>
-        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-            <DialogTrigger asChild>
-                <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Tambah Drama Baru</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                    <DialogTitle>{editingDrama ? 'Ubah Drama' : 'Tambah Drama Baru'}</DialogTitle>
-                </DialogHeader>
-                <DramaForm drama={editingDrama} onFinished={onFormFinished} />
-            </DialogContent>
-        </Dialog>
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full md:w-auto">
+            <div className="relative w-full md:w-64">
+                <Input
+                    type="search"
+                    placeholder="Cari drama..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-10"
+                />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            </div>
+            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                <DialogTrigger asChild>
+                    <Button onClick={handleAddNew} className="w-full md:w-auto"><PlusCircle className="mr-2 h-4 w-4" /> Tambah Drama Baru</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>{editingDrama ? 'Ubah Drama' : 'Tambah Drama Baru'}</DialogTitle>
+                    </DialogHeader>
+                    <DramaForm drama={editingDrama} onFinished={onFormFinished} />
+                </DialogContent>
+            </Dialog>
+        </div>
       </div>
       
       <div className="rounded-md border">
@@ -168,7 +205,7 @@ export default function DramasCrud() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {dramas && dramas.length > 0 ? dramas.map((drama) => (
+            {paginatedDramas && paginatedDramas.length > 0 ? paginatedDramas.map((drama) => (
               <TableRow key={drama.id}>
                 <TableCell className="font-medium">{drama.title}</TableCell>
                 <TableCell>{drama.isTrending ? 'Ya' : 'Tidak'}</TableCell>
@@ -197,12 +234,25 @@ export default function DramasCrud() {
               </TableRow>
             )) : (
                 <TableRow>
-                    <TableCell colSpan={4} className="text-center">Tidak ada drama ditemukan.</TableCell>
+                    <TableCell colSpan={4} className="text-center">{searchQuery ? "Tidak ada drama yang cocok." : "Tidak ada drama ditemukan."}</TableCell>
                 </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+      {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-4">
+                <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+                    Sebelumnya
+                </Button>
+                <span className="text-muted-foreground font-medium">
+                    Halaman {currentPage} dari {totalPages}
+                </span>
+                <Button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Berikutnya
+                </Button>
+            </div>
+        )}
     </div>
   );
 }
