@@ -71,6 +71,15 @@ export default function DramaDetailPage({ params }: DramaDetailPageProps) {
                     <span className="font-normal text-muted-foreground ml-auto mr-4 text-sm">{episode.duration}</span>
                   </AccordionTrigger>
                   <AccordionContent>
+                    {drama.id === '1' && episode.id === '101' && (
+                      <div className="aspect-video w-full overflow-hidden rounded-lg shadow-lg mb-4">
+                        <iframe
+                          src="https://drive.google.com/file/d/19bdwYFqqd7vzYFSI_Qc5qASVVSbr-nD5/preview"
+                          allowFullScreen
+                          className="h-full w-full border-0"
+                        ></iframe>
+                      </div>
+                    )}
                     <p className="text-muted-foreground">{episode.description}</p>
                   </AccordionContent>
                 </AccordionItem>
