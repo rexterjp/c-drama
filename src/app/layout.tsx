@@ -8,7 +8,7 @@ import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'C-Drama',
-  description: 'Portal Anda untuk short drama terbaik.',
+  description: 'Portal Anda untuk drama pendek terbaik.',
 };
 
 export default function RootLayout({
