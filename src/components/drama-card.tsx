@@ -1,5 +1,7 @@
+'use client';
+
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import type { Drama } from '@/lib/data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -8,8 +10,16 @@ type DramaCardProps = {
 };
 
 export default function DramaCard({ drama }: DramaCardProps) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (drama && drama.id) {
+      router.push(`/dramas/${drama.id}`);
+    }
+  };
+
   return (
-    <Link href={`/dramas/${drama.id}`} className="group block">
+    <div onClick={handleClick} className="group block cursor-pointer">
       <Card className="h-full overflow-hidden rounded-lg transition-all duration-180 ease-out shadow-sm hover:shadow-lg hover:-translate-y-1 bg-transparent">
         <CardContent className="p-0 relative aspect-[2/3]">
           {drama.posterUrl && (
@@ -28,6 +38,6 @@ export default function DramaCard({ drama }: DramaCardProps) {
           </CardTitle>
         </CardHeader>
       </Card>
-    </Link>
+    </div>
   );
 }
