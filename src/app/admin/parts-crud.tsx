@@ -110,15 +110,15 @@ function PartForm({ part, dramas, onFinished }: { part?: Part, dramas: Drama[], 
                     />
                     <ScrollArea className="h-72">
                         {filteredDramas.map((drama) => (
-                            <div
+                            <button
+                                type="button"
                                 key={drama.id}
-                                onMouseDown={(e) => {
-                                    e.preventDefault();
+                                onClick={() => {
                                     field.onChange(drama.id);
                                     setOpen(false);
                                     setSearch('');
                                 }}
-                                className="text-sm p-2 rounded-sm hover:bg-accent cursor-pointer flex items-center w-full text-left"
+                                className="text-sm p-2 rounded-sm hover:bg-accent cursor-pointer flex items-center w-full text-left justify-start font-normal"
                             >
                               <Check
                                 className={cn(
@@ -127,7 +127,7 @@ function PartForm({ part, dramas, onFinished }: { part?: Part, dramas: Drama[], 
                                 )}
                               />
                               {drama.title}
-                            </div>
+                            </button>
                         ))}
                         {!filteredDramas.length && <p className="p-2 text-center text-sm text-muted-foreground">Drama tidak ditemukan.</p>}
                     </ScrollArea>
