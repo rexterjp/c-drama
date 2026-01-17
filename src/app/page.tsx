@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useMemo, useState, useEffect } from 'react';
 
 import { getDramas, getTrendingDramas } from '@/lib/data';
 import type { Drama } from '@/lib/data';
@@ -104,6 +104,8 @@ function DramaGridSkeleton() {
 export default function Home() {
   const allDramas = getDramas();
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const filteredDramas = useMemo(() => {
     if (!searchQuery) {
@@ -113,6 +115,26 @@ export default function Home() {
       drama.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [allDramas, searchQuery]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const totalPages = Math.ceil(filteredDramas.length / itemsPerPage);
+
+  const paginatedDramas = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredDramas.slice(startIndex, endIndex);
+  }, [filteredDramas, currentPage, itemsPerPage]);
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
 
   return (
     <div>
@@ -126,6 +148,7 @@ export default function Home() {
                 <Input
                     type="search"
                     placeholder="Search dramas..."
+                    value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 h-12 rounded-full shadow-sm bg-background"
                 />
@@ -134,14 +157,28 @@ export default function Home() {
         </div>
 
         <Suspense fallback={<DramaGridSkeleton />}>
-          {filteredDramas.length > 0 ? (
-            <AllDramasGrid dramas={filteredDramas} />
+          {paginatedDramas.length > 0 ? (
+            <AllDramasGrid dramas={paginatedDramas} />
           ) : (
             <div className="border-dashed border-2 rounded-lg p-8 text-center mt-4">
               <p className="text-muted-foreground">No dramas found matching your search.</p>
             </div>
           )}
         </Suspense>
+
+        {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-8">
+                <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+                    Previous
+                </Button>
+                <span className="text-muted-foreground font-medium">
+                    Page {currentPage} of {totalPages}
+                </span>
+                <Button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Next
+                </Button>
+            </div>
+        )}
       </section>
     </div>
   );
