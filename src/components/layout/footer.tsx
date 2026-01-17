@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="text-center sm:text-left">
             <Link href="/" className="inline-block mb-2">
               <Image
-                src="https://i.ibb.co/wF450cnb/unnamed-2.png"
+                src="https://i.ibb.co/KxFGx3FJ/unnamed-1-1.png"
                 alt="C-Drama Logo"
                 width={200}
                 height={50}

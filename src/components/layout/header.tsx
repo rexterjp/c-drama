@@ -98,7 +98,7 @@ export default function Header() {
       <div className="container mx-auto h-28 flex items-center justify-between px-4">
         <Link href="/">
           <Image
-            src="https://i.ibb.co/wF450cnb/unnamed-2.png"
+            src="https://i.ibb.co/KxFGx3FJ/unnamed-1-1.png"
             alt="C-Drama Logo"
             width={200}
             height={50}
