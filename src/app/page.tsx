@@ -22,13 +22,13 @@ function Hero() {
           This platform is a personal project by <span className="text-foreground font-semibold">Candra Pramudya Arunita</span>, created to share the best of Chinese dramas with the world.
         </p>
         <div className="flex justify-center gap-4">
-          <Button asChild size="lg" className="h-12 text-lg rounded-full" variant="outline">
+          <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#E4405F] hover:bg-[#E4405F]/90 text-white">
             <Link href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
               <InstagramIcon className="mr-2 h-5 w-5" />
               Instagram
             </Link>
           </Button>
-          <Button asChild size="lg" className="h-12 text-lg rounded-full">
+          <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#25D366] hover:bg-[#25D366]/90 text-white">
             <Link href="https://wa.me" target="_blank" rel="noopener noreferrer">
               <WhatsAppIcon className="mr-2 h-5 w-5" />
               WhatsApp
