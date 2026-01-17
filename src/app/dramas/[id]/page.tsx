@@ -15,7 +15,7 @@ export default function DramaDetailPage() {
   const firestore = useFirestore();
 
   const dramaRef = useMemoFirebase(() => (firestore && id ? doc(firestore, 'dramas', id) : null), [firestore, id]);
-  const { data: drama, isLoading: isDramaLoading } = useDoc<Drama>(dramaRef);
+  const { data: drama, isLoading: isDramaLoading, error: dramaError } = useDoc<Drama>(dramaRef);
 
   const partsQuery = useMemoFirebase(
     () => (firestore && id ? query(collection(firestore, 'parts'), where('dramaId', '==', id)) : null),
@@ -23,7 +23,8 @@ export default function DramaDetailPage() {
   );
   const { data: parts, isLoading: arePartsLoading } = useCollection<Part>(partsQuery);
 
-  const isLoading = !id || isDramaLoading || arePartsLoading;
+  // Correctly handle loading state
+  const isLoading = !id || isDramaLoading || arePartsLoading || (id && !drama && !dramaError);
 
   const getEmbedUrl = (url: string) => {
     if (typeof url !== 'string') {
@@ -32,6 +33,13 @@ export default function DramaDetailPage() {
     const fileIdMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if (url.includes('drive.google.com') && fileIdMatch && fileIdMatch[1]) {
       return `https://drive.google.com/file/d/${fileIdMatch[1]}/preview`;
+    }
+    return url;
+  };
+  
+  const getCorrectedUrl = (url: string) => {
+    if (typeof url === 'string' && url.includes('i.ibb.co.com')) {
+      return url.replace('i.ibb.co.com', 'i.ibb.co');
     }
     return url;
   };
@@ -60,15 +68,17 @@ export default function DramaDetailPage() {
   if (!drama) {
     notFound();
   }
+  
+  const posterUrl = drama.posterUrl ? getCorrectedUrl(drama.posterUrl) : undefined;
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <div className="grid md:grid-cols-3 gap-8 md:gap-12">
         <div className="md:col-span-1">
-          {drama.posterUrl && (
+          {posterUrl && (
             <div className="rounded-lg overflow-hidden shadow-lg">
               <Image
-                src={drama.posterUrl}
+                src={posterUrl}
                 alt={`Poster untuk ${drama.title}`}
                 width={400}
                 height={600}

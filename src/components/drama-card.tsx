@@ -12,13 +12,22 @@ type DramaCardProps = {
 export default function DramaCard({ drama }: DramaCardProps) {
   if (!drama?.id) return null;
 
+  const getCorrectedUrl = (url: string) => {
+    if (typeof url === 'string' && url.includes('i.ibb.co.com')) {
+      return url.replace('i.ibb.co.com', 'i.ibb.co');
+    }
+    return url;
+  };
+  
+  const posterUrl = drama.posterUrl ? getCorrectedUrl(drama.posterUrl) : undefined;
+
   return (
     <Link href={`/dramas/${drama.id}`} className="group block cursor-pointer">
       <Card className="h-full overflow-hidden rounded-lg transition-all duration-180 ease-out shadow-sm hover:shadow-lg hover:-translate-y-1 bg-transparent">
         <CardContent className="p-0 relative aspect-[2/3]">
-          {drama.posterUrl && (
+          {posterUrl && (
             <Image
-              src={drama.posterUrl}
+              src={posterUrl}
               alt={`Poster for ${drama.title}`}
               fill
               className="object-cover"
