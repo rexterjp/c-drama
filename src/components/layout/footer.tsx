@@ -8,14 +8,14 @@ import { Twitter, Send } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className="bg-background text-muted-foreground mt-16 border-t">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col items-center justify-center text-center gap-8">
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex flex-col items-center justify-center text-center gap-4">
           <Link href="/">
             <Image
               src="https://i.ibb.co/KxFGx3FJ/unnamed-1-1.png"
               alt="C-Drama Logo"
-              width={160}
-              height={40}
+              width={200}
+              height={50}
               className="h-auto"
             />
           </Link>
