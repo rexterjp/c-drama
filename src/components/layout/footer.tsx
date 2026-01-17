@@ -13,7 +13,7 @@ export default function Footer() {
                 alt="C-Pop Now Logo"
                 width={120}
                 height={30}
-                className="h-8 w-auto"
+                className="h-10 w-auto"
               />
             </Link>
             <p className="text-sm">Portal Anda untuk drama China terbaik.</p>
