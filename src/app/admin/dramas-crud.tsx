@@ -23,7 +23,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const dramaSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  posterUrl: z.string().url('Must be a valid URL'),
+  posterUrl: z.string().min(1, 'Poster URL is required'),
   isTrending: z.boolean().default(false),
   isHot: z.boolean().default(false),
 });
@@ -45,13 +45,21 @@ function DramaForm({ drama, onFinished }: { drama?: Drama, onFinished: () => voi
 
   async function onSubmit(values: z.infer<typeof dramaSchema>) {
     try {
+      const submittedValues = { ...values };
+      const imgTagRegex = /<img src="([^"]+)"/;
+      const match = submittedValues.posterUrl.match(imgTagRegex);
+
+      if (match && match[1]) {
+        submittedValues.posterUrl = match[1];
+      }
+
       if (drama) {
         const dramaRef = doc(firestore, 'dramas', drama.id);
-        updateDocumentNonBlocking(dramaRef, values);
-        toast({ title: 'Drama Updated', description: `${values.title} has been updated.` });
+        updateDocumentNonBlocking(dramaRef, submittedValues);
+        toast({ title: 'Drama Updated', description: `${submittedValues.title} has been updated.` });
       } else {
-        addDocumentNonBlocking(dramasCollection, values);
-        toast({ title: 'Drama Created', description: `${values.title} has been created.` });
+        addDocumentNonBlocking(dramasCollection, submittedValues);
+        toast({ title: 'Drama Created', description: `${submittedValues.title} has been created.` });
       }
       onFinished();
     } catch (e: any) {
