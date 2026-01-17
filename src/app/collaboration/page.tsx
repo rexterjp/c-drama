@@ -4,14 +4,14 @@ import InstagramIcon from '@/components/icons/instagram-icon';
 import { Twitter, Send } from 'lucide-react';
 import WhatsAppIcon from '@/components/icons/whatsapp-icon';
 
-export default function RequestPage() {
+export default function CollaborationPage() {
   return (
     <div className="container mx-auto px-4 py-16 md:py-24 text-center">
       <h1 className="font-headline text-4xl md:text-5xl font-bold text-foreground mb-4">
-        Minta Drama
+        Mari Berkolaborasi
       </h1>
       <p className="text-muted-foreground text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-        Tidak dapat menemukan drama pendek favorit Anda? Beri tahu kami! Hubungi langsung melalui media sosial untuk mengajukan permintaan. Kami selalu ingin memperluas koleksi kami berdasarkan masukan komunitas.
+        Tertarik untuk berkolaborasi dalam proyek drama pendek? Kami terbuka untuk ide-ide baru dan kemitraan. Hubungi kami melalui media sosial untuk mendiskusikan potensi kolaborasi.
       </p>
       <div className="flex flex-wrap justify-center gap-4">
         <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#E4405F] hover:bg-[#E4405F]/90 text-white">

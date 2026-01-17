@@ -26,6 +26,7 @@ function NavLinks({ onLinkClick }: { onLinkClick?: () => void }) {
     <>
       <Link href="/" className="font-semibold text-lg md:text-base hover:underline" onClick={onLinkClick}>Beranda</Link>
       <Link href="/request" className="font-semibold text-lg md:text-base hover:underline" onClick={onLinkClick}>Permintaan</Link>
+      <Link href="/collaboration" className="font-semibold text-lg md:text-base hover:underline" onClick={onLinkClick}>Kolaborasi</Link>
     </>
   );
 }
@@ -103,7 +104,8 @@ export default function Header() {
             width={200}
             height={50}
             priority
-            className="h-[120px] w-auto"
+            className="h-auto"
+            style={{ width: '250px' }}
           />
         </Link>
 
