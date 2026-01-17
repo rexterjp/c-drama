@@ -2,8 +2,6 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getDramaById } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Badge } from '@/components/ui/badge';
-import StarIcon from '@/components/icons/star-icon';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 type DramaDetailPageProps = {
@@ -40,27 +38,9 @@ export default function DramaDetailPage({ params }: DramaDetailPageProps) {
           )}
         </div>
         <div className="md:col-span-2">
-          <div className="flex flex-wrap gap-2 mb-4">
-            {drama.genre.map((g) => (
-              <Badge key={g} variant="secondary" className="text-sm">{g}</Badge>
-            ))}
-          </div>
-          <h1 className="font-headline text-4xl md:text-5xl font-bold mb-4">{drama.title}</h1>
-          
-          <div className="flex items-center gap-2 mb-6">
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <StarIcon key={i} className={`w-7 h-7 ${i < drama.rating ? 'text-secondary' : 'text-muted-foreground/30'}`} />
-              ))}
-            </div>
-            <p className="font-bold text-xl">{drama.rating.toFixed(1)}</p>
-          </div>
+          <h1 className="font-headline text-4xl md:text-5xl font-bold mb-8">{drama.title}</h1>
 
-          <p className="text-lg leading-relaxed text-muted-foreground mb-8">
-            {drama.synopsis}
-          </p>
-
-          <div className="mb-8">
+          <div>
             <h2 className="font-headline text-3xl font-bold mb-4">Episodes</h2>
             {drama.episodes.length > 0 ? (
             <Accordion type="single" collapsible className="w-full">
