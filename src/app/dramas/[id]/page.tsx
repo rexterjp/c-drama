@@ -58,6 +58,7 @@ export default function DramaDetailPage({ params }: DramaDetailPageProps) {
                           allowFullScreen
                           className="h-full w-full border-0"
                         ></iframe>
+                        <div className="absolute top-0 right-0 h-14 w-16 z-10"></div>
                       </div>
                     )}
                     <p className="text-muted-foreground">{episode.description}</p>
