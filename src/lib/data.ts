@@ -12,11 +12,8 @@ export type Drama = {
   id: string;
   title: string;
   posterUrl: string;
-  genreIds: string[];
-  rating: number;
   isTrending: boolean;
   isHot: boolean;
-  synopsis: string;
 };
 
 export type Genre = {

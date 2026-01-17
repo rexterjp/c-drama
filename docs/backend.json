@@ -15,21 +15,6 @@
           "description": "URL of the drama's poster image.",
           "format": "uri"
         },
-        "synopsis": {
-          "type": "string",
-          "description": "A brief summary of the drama's plot."
-        },
-        "rating": {
-          "type": "number",
-          "description": "The drama's rating (e.g., out of 10)."
-        },
-        "genreIds": {
-          "type": "array",
-          "description": "References to Genres. (Relationship: Drama N:N Genre)",
-          "items": {
-            "type": "string"
-          }
-        },
         "isTrending": {
           "type": "boolean",
           "description": "Indicates if the drama is currently trending."
@@ -42,8 +27,6 @@
       "required": [
         "title",
         "posterUrl",
-        "synopsis",
-        "rating",
         "isTrending",
         "isHot"
       ]

@@ -7,13 +7,11 @@ import * as z from 'zod';
 import { collection, doc } from 'firebase/firestore';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { addDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking } from '@/firebase/non-blocking-updates';
-import type { Drama, Genre } from '@/lib/data';
+import type { Drama } from '@/lib/data';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
@@ -25,29 +23,23 @@ import { useToast } from '@/hooks/use-toast';
 
 const dramaSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  synopsis: z.string().min(1, 'Synopsis is required'),
   posterUrl: z.string().url('Must be a valid URL'),
-  rating: z.coerce.number().min(0).max(10),
   isTrending: z.boolean().default(false),
   isHot: z.boolean().default(false),
-  genreIds: z.array(z.string()).default([]),
 });
 
-function DramaForm({ drama, genres, onFinished }: { drama?: Drama, genres: Genre[], onFinished: () => void }) {
+function DramaForm({ drama, onFinished }: { drama?: Drama, onFinished: () => void }) {
   const firestore = useFirestore();
   const { toast } = useToast();
   const dramasCollection = useMemoFirebase(() => collection(firestore, 'dramas'), [firestore]);
 
   const form = useForm<z.infer<typeof dramaSchema>>({
     resolver: zodResolver(dramaSchema),
-    defaultValues: drama ? { ...drama, rating: drama.rating || 0 } : {
+    defaultValues: drama ? drama : {
       title: '',
-      synopsis: '',
       posterUrl: '',
-      rating: 0,
       isTrending: false,
       isHot: false,
-      genreIds: [],
     },
   });
 
@@ -73,14 +65,8 @@ function DramaForm({ drama, genres, onFinished }: { drama?: Drama, genres: Genre
         <FormField control={form.control} name="title" render={({ field }) => (
           <FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
         )} />
-        <FormField control={form.control} name="synopsis" render={({ field }) => (
-          <FormItem><FormLabel>Synopsis</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
-        )} />
         <FormField control={form.control} name="posterUrl" render={({ field }) => (
           <FormItem><FormLabel>Poster URL (imgbb)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-        )} />
-        <FormField control={form.control} name="rating" render={({ field }) => (
-          <FormItem><FormLabel>Rating</FormLabel><FormControl><Input type="number" step="0.1" {...field} /></FormControl><FormMessage /></FormItem>
         )} />
         <div className="flex gap-8">
             <FormField control={form.control} name="isTrending" render={({ field }) => (
@@ -96,37 +82,6 @@ function DramaForm({ drama, genres, onFinished }: { drama?: Drama, genres: Genre
             </FormItem>
             )} />
         </div>
-        <FormField control={form.control} name="genreIds" render={() => (
-            <FormItem>
-                <FormLabel>Genres</FormLabel>
-                <div className="grid grid-cols-3 gap-2">
-                {genres.map((genre) => (
-                    <FormField
-                    key={genre.id}
-                    control={form.control}
-                    name="genreIds"
-                    render={({ field }) => {
-                        return (
-                        <FormItem key={genre.id} className="flex flex-row items-start space-x-3 space-y-0">
-                            <FormControl>
-                            <Checkbox
-                                checked={field.value?.includes(genre.id)}
-                                onCheckedChange={(checked) => {
-                                return checked
-                                    ? field.onChange([...(field.value || []), genre.id])
-                                    : field.onChange(field.value?.filter((value) => value !== genre.id));
-                                }}
-                            />
-                            </FormControl>
-                            <FormLabel className="font-normal">{genre.name}</FormLabel>
-                        </FormItem>
-                        );
-                    }}
-                    />
-                ))}
-                </div>
-            </FormItem>
-        )}/>
         
         <DialogFooter className="sticky bottom-0 bg-background pt-4">
           <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
@@ -147,9 +102,6 @@ export default function DramasCrud() {
   const dramasCollection = useMemoFirebase(() => collection(firestore, 'dramas'), [firestore]);
   const { data: dramas, isLoading: dramasLoading } = useCollection<Drama>(dramasCollection);
 
-  const genresCollection = useMemoFirebase(() => collection(firestore, 'genres'), [firestore]);
-  const { data: genres, isLoading: genresLoading } = useCollection<Genre>(genresCollection);
-  
   const handleEdit = (drama: Drama) => {
     setEditingDrama(drama);
     setIsFormOpen(true);
@@ -171,7 +123,7 @@ export default function DramasCrud() {
     setEditingDrama(undefined);
   }
 
-  if (dramasLoading || genresLoading) {
+  if (dramasLoading) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-10 w-40" />
@@ -188,11 +140,11 @@ export default function DramasCrud() {
             <DialogTrigger asChild>
                 <Button onClick={handleAddNew}><PlusCircle className="mr-2 h-4 w-4" /> Add New Drama</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-2xl">
+            <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>{editingDrama ? 'Edit Drama' : 'Add New Drama'}</DialogTitle>
                 </DialogHeader>
-                <DramaForm drama={editingDrama} genres={genres || []} onFinished={onFormFinished} />
+                <DramaForm drama={editingDrama} onFinished={onFormFinished} />
             </DialogContent>
         </Dialog>
       </div>
@@ -202,7 +154,6 @@ export default function DramasCrud() {
           <TableHeader>
             <TableRow>
               <TableHead>Title</TableHead>
-              <TableHead>Rating</TableHead>
               <TableHead>Trending</TableHead>
               <TableHead>Hot</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -212,7 +163,6 @@ export default function DramasCrud() {
             {dramas && dramas.length > 0 ? dramas.map((drama) => (
               <TableRow key={drama.id}>
                 <TableCell className="font-medium">{drama.title}</TableCell>
-                <TableCell>{drama.rating}</TableCell>
                 <TableCell>{drama.isTrending ? 'Yes' : 'No'}</TableCell>
                 <TableCell>{drama.isHot ? 'Yes' : 'No'}</TableCell>
                 <TableCell className="text-right">
@@ -239,7 +189,7 @@ export default function DramasCrud() {
               </TableRow>
             )) : (
                 <TableRow>
-                    <TableCell colSpan={5} className="text-center">No dramas found.</TableCell>
+                    <TableCell colSpan={4} className="text-center">No dramas found.</TableCell>
                 </TableRow>
             )}
           </TableBody>
