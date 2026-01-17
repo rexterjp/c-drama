@@ -14,14 +14,14 @@ export default function DramaCard({ drama }: DramaCardProps) {
   return (
     <Link href={`/dramas/${drama.id}`} className="group block">
       <Card className="h-full overflow-hidden rounded-lg transition-all duration-180 ease-out shadow-sm hover:shadow-lg hover:-translate-y-1 bg-transparent">
-        <CardContent className="p-0">
+        <CardContent className="p-0 relative aspect-[2/3]">
           {poster && (
             <Image
               src={poster.imageUrl}
               alt={`Poster for ${drama.title}`}
-              width={400}
-              height={600}
-              className="w-full h-auto object-cover rounded-md"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
               data-ai-hint={poster.imageHint}
             />
           )}
