@@ -1,15 +1,19 @@
-import Link from 'next/link';
-import { Suspense } from 'react';
+'use client';
 
-import { getDramas, getTrendingDramas, getGenres } from '@/lib/data';
+import Link from 'next/link';
+import { Suspense, useMemo, useState } from 'react';
+
+import { getDramas, getTrendingDramas } from '@/lib/data';
+import type { Drama } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Skeleton } from '@/components/ui/skeleton';
 import DramaCard from '@/components/drama-card';
-import GenreFilters from '@/components/genre-filters';
 import InstagramIcon from '@/components/icons/instagram-icon';
 import WhatsAppIcon from '@/components/icons/whatsapp-icon';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 
 function Hero() {
   return (
@@ -68,8 +72,7 @@ function TrendingDramas() {
   );
 }
 
-function AllDramasGrid() {
-  const dramas = getDramas();
+function AllDramasGrid({ dramas }: { dramas: Drama[] }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
       {dramas.map((drama) => (
@@ -99,7 +102,17 @@ function DramaGridSkeleton() {
 
 
 export default function Home() {
-  const genres = getGenres();
+  const allDramas = getDramas();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredDramas = useMemo(() => {
+    if (!searchQuery) {
+      return allDramas;
+    }
+    return allDramas.filter((drama) =>
+      drama.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [allDramas, searchQuery]);
 
   return (
     <div>
@@ -107,10 +120,27 @@ export default function Home() {
       <TrendingDramas />
 
       <section className="container mx-auto px-4 py-8 md:py-12">
-        <h2 className="font-headline text-3xl md:text-4xl font-bold mb-6">All Dramas</h2>
-        <GenreFilters genres={genres} />
+        <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
+            <h2 className="font-headline text-3xl md:text-4xl font-bold">All Dramas</h2>
+            <div className="relative w-full max-w-sm">
+                <Input
+                    type="search"
+                    placeholder="Search dramas..."
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-12 rounded-full shadow-sm bg-background"
+                />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            </div>
+        </div>
+
         <Suspense fallback={<DramaGridSkeleton />}>
-          <AllDramasGrid />
+          {filteredDramas.length > 0 ? (
+            <AllDramasGrid dramas={filteredDramas} />
+          ) : (
+            <div className="border-dashed border-2 rounded-lg p-8 text-center mt-4">
+              <p className="text-muted-foreground">No dramas found matching your search.</p>
+            </div>
+          )}
         </Suspense>
       </section>
     </div>
