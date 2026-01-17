@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -6,7 +7,15 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="text-center sm:text-left">
-            <p className="font-headline text-xl font-bold text-foreground">C-Pop Now</p>
+            <Link href="/" className="inline-block mb-2">
+              <Image
+                src="https://i.ibb.co/wF450cnb/unnamed-2.png"
+                alt="C-Pop Now Logo"
+                width={120}
+                height={30}
+                className="h-8 w-auto"
+              />
+            </Link>
             <p className="text-sm">Portal Anda untuk drama China terbaik.</p>
           </div>
           <div className="flex gap-6">

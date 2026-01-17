@@ -6,6 +6,7 @@ import { useUser, useAuth } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -95,8 +96,15 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm border-b">
       <div className="container mx-auto h-20 flex items-center justify-between px-4">
-        <Link href="/" className="font-headline text-2xl md:text-3xl font-bold">
-          C-Pop Now
+        <Link href="/">
+          <Image
+            src="https://i.ibb.co/wF450cnb/unnamed-2.png"
+            alt="C-Pop Now Logo"
+            width={160}
+            height={40}
+            priority
+            className="h-10 w-auto"
+          />
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
