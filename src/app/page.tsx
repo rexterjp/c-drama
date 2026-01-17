@@ -24,7 +24,7 @@ function Hero() {
           Selamat Datang di C-Drama
         </h1>
         <p className="text-muted-foreground text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-          Platform ini adalah proyek pribadi oleh <span className="text-foreground font-semibold">Candra Pramudya Arunita</span>, dibuat untuk membagikan drama pendek trending kepada dunia.
+          Platform ini adalah proyek pribadi oleh <span className="text-foreground font-semibold">Candra Pramudya Arunita</span>, dibuat untuk membagikan drama pendek trending kepada Anda.
         </p>
         <div className="flex justify-center gap-4">
           <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#E4405F] hover:bg-[#E4405F]/90 text-white">

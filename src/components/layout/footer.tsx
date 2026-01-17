@@ -8,14 +8,14 @@ import { Twitter, Send } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className="bg-background text-muted-foreground mt-16 border-t">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-center text-center gap-8">
           <Link href="/">
             <Image
               src="https://i.ibb.co/KxFGx3FJ/unnamed-1-1.png"
               alt="C-Drama Logo"
-              width={120}
-              height={30}
+              width={160}
+              height={40}
               className="h-auto"
             />
           </Link>
@@ -46,7 +46,7 @@ export default function Footer() {
             </Button>
           </div>
           <div className="text-center text-sm space-y-1">
-             <p>Portal Anda untuk drama pendek terbaik.</p>
+             <p>Portal Anda untuk drama pendek trending.</p>
              <p>&copy; {new Date().getFullYear()} C-Drama. Santai, hak cipta aman.</p>
           </div>
         </div>
