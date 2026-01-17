@@ -5,13 +5,20 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import DramasCrud from './dramas-crud';
+import GenresCrud from './genres-crud';
+import EpisodesCrud from './episodes-crud';
 
 function AdminDashboard() {
   const auth = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut(auth);
+    if (auth) {
+      await signOut(auth);
+    }
     router.push('/');
   };
 
@@ -21,11 +28,23 @@ function AdminDashboard() {
         <h1 className="font-headline text-4xl font-bold">Admin Dashboard</h1>
         <Button onClick={handleLogout} variant="outline">Logout</Button>
       </div>
-      <div className="border-dashed border-2 rounded-lg p-8 text-center">
-        <p className="text-muted-foreground">
-          Welcome to the admin dashboard. CRUD functionality for dramas, genres, and episodes will be implemented here.
-        </p>
-      </div>
+      
+      <Tabs defaultValue="dramas" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="dramas">Dramas</TabsTrigger>
+          <TabsTrigger value="genres">Genres</TabsTrigger>
+          <TabsTrigger value="episodes">Episodes</TabsTrigger>
+        </TabsList>
+        <TabsContent value="dramas" className="mt-6">
+          <DramasCrud />
+        </TabsContent>
+        <TabsContent value="genres" className="mt-6">
+          <GenresCrud />
+        </TabsContent>
+        <TabsContent value="episodes" className="mt-6">
+          <EpisodesCrud />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

@@ -10,9 +10,10 @@
           "type": "string",
           "description": "Title of the drama."
         },
-        "posterId": {
+        "posterUrl": {
           "type": "string",
-          "description": "ID of the drama's poster image from placeholder-images.json."
+          "description": "URL of the drama's poster image.",
+          "format": "uri"
         },
         "synopsis": {
           "type": "string",
@@ -20,7 +21,7 @@
         },
         "rating": {
           "type": "number",
-          "description": "The drama's rating (e.g., out of 5 stars)."
+          "description": "The drama's rating (e.g., out of 10)."
         },
         "genreIds": {
           "type": "array",
@@ -40,7 +41,7 @@
       },
       "required": [
         "title",
-        "posterId",
+        "posterUrl",
         "synopsis",
         "rating",
         "isTrending",

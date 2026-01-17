@@ -5,7 +5,6 @@ import { notFound, useParams } from 'next/navigation';
 import { useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { doc, collection, query, where } from 'firebase/firestore';
 
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import type { Drama, Episode } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -49,22 +48,19 @@ export default function DramaDetailPage() {
     notFound();
   }
 
-  const poster = PlaceHolderImages.find((p) => p.id === drama.posterId);
-
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
       <div className="grid md:grid-cols-3 gap-8 md:gap-12">
         <div className="md:col-span-1">
-          {poster && (
+          {drama.posterUrl && (
             <div className="rounded-lg overflow-hidden shadow-lg">
               <Image
-                src={poster.imageUrl}
+                src={drama.posterUrl}
                 alt={`Poster for ${drama.title}`}
                 width={400}
                 height={600}
                 className="w-full h-auto"
                 priority
-                data-ai-hint={poster.imageHint}
               />
             </div>
           )}

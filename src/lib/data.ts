@@ -11,7 +11,7 @@ export type Episode = {
 export type Drama = {
   id: string;
   title: string;
-  posterId: string;
+  posterUrl: string;
   genreIds: string[];
   rating: number;
   isTrending: boolean;
