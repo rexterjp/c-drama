@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { Suspense, useMemo, useState, useEffect } from 'react';
+import { collection, query, where } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 
-import { getDramas, getTrendingDramas } from '@/lib/data';
 import type { Drama } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -45,7 +46,30 @@ function Hero() {
 }
 
 function TrendingDramas() {
-  const trendingDramas = getTrendingDramas();
+  const firestore = useFirestore();
+  const trendingDramasQuery = useMemoFirebase(
+    () => (firestore ? query(collection(firestore, 'dramas'), where('isTrending', '==', true)) : null),
+    [firestore]
+  );
+  const { data: trendingDramas, isLoading } = useCollection<Drama>(trendingDramasQuery);
+
+  if (isLoading) {
+    return (
+      <section className="py-8 md:py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="font-headline text-3xl md:text-4xl font-bold mb-6">Trending Now</h2>
+          <div className="flex space-x-4 -ml-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="basis-1/2 md:basis-1/3 lg:basis-1/5 pl-4">
+                <Skeleton className="w-full aspect-[2/3] rounded-lg" />
+                <Skeleton className="h-4 w-3/4 my-2" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-8 md:py-12">
@@ -58,7 +82,7 @@ function TrendingDramas() {
           className="w-full"
         >
           <CarouselContent className="-ml-4">
-            {trendingDramas.map((drama) => (
+            {trendingDramas?.map((drama) => (
               <CarouselItem key={drama.id} className="basis-1/2 md:basis-1/3 lg:basis-1/5 pl-4">
                 <DramaCard drama={drama} />
               </CarouselItem>
@@ -102,16 +126,20 @@ function DramaGridSkeleton() {
 
 
 export default function Home() {
-  const allDramas = getDramas();
+  const firestore = useFirestore();
+  const dramasQuery = useMemoFirebase(() => (firestore ? collection(firestore, 'dramas') : null), [firestore]);
+  const { data: allDramas, isLoading } = useCollection<Drama>(dramasQuery);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const filteredDramas = useMemo(() => {
+    const dramas = allDramas || [];
     if (!searchQuery) {
-      return allDramas;
+      return dramas;
     }
-    return allDramas.filter((drama) =>
+    return dramas.filter((drama) =>
       drama.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [allDramas, searchQuery]);
@@ -157,11 +185,18 @@ export default function Home() {
         </div>
 
         <Suspense fallback={<DramaGridSkeleton />}>
-          {paginatedDramas.length > 0 ? (
+          {isLoading ? (
+            <DramaGridSkeleton />
+          ) : paginatedDramas.length > 0 ? (
             <AllDramasGrid dramas={paginatedDramas} />
           ) : (
             <div className="border-dashed border-2 rounded-lg p-8 text-center mt-4">
-              <p className="text-muted-foreground">No dramas found matching your search.</p>
+              <p className="text-muted-foreground">
+                {searchQuery
+                  ? 'No dramas found matching your search.'
+                  : 'No dramas available yet. Add data to your Firestore "dramas" collection.'
+                }
+              </p>
             </div>
           )}
         </Suspense>

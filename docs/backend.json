@@ -6,18 +6,13 @@
       "type": "object",
       "description": "Represents a Chinese drama.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Drama entity."
-        },
         "title": {
           "type": "string",
           "description": "Title of the drama."
         },
-        "posterUrl": {
+        "posterId": {
           "type": "string",
-          "description": "URL of the drama's poster image.",
-          "format": "uri"
+          "description": "ID of the drama's poster image from placeholder-images.json."
         },
         "synopsis": {
           "type": "string",
@@ -34,20 +29,22 @@
             "type": "string"
           }
         },
-        "episodeIds": {
-          "type": "array",
-          "description": "References to Episodes. (Relationship: Drama 1:N Episode)",
-          "items": {
-            "type": "string"
-          }
+        "isTrending": {
+          "type": "boolean",
+          "description": "Indicates if the drama is currently trending."
+        },
+        "isHot": {
+          "type": "boolean",
+          "description": "Indicates if the drama is currently hot."
         }
       },
       "required": [
-        "id",
         "title",
-        "posterUrl",
+        "posterId",
         "synopsis",
-        "rating"
+        "rating",
+        "isTrending",
+        "isHot"
       ]
     },
     "Genre": {
@@ -56,17 +53,12 @@
       "type": "object",
       "description": "Represents a genre of dramas.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Genre entity."
-        },
         "name": {
           "type": "string",
           "description": "Name of the genre (e.g., Romance, Historical)."
         }
       },
       "required": [
-        "id",
         "name"
       ]
     },
@@ -76,10 +68,6 @@
       "type": "object",
       "description": "Represents an episode of a drama.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Episode entity."
-        },
         "dramaId": {
           "type": "string",
           "description": "Reference to Drama. (Relationship: Drama 1:N Episode)"
@@ -96,14 +84,23 @@
           "type": "string",
           "description": "URL of the video file for the episode.",
           "format": "uri"
+        },
+        "duration": {
+          "type": "string",
+          "description": "Duration of the episode (e.g., '45min')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief summary of the episode."
         }
       },
       "required": [
-        "id",
         "dramaId",
         "episodeNumber",
         "title",
-        "videoUrl"
+        "videoUrl",
+        "duration",
+        "description"
       ]
     }
   },
@@ -120,15 +117,9 @@
         "definition": {
           "entityName": "Drama",
           "schema": {
-            "$ref": "#/backend/entities/Drama"
+            "$ref": "#/entities/Drama"
           },
-          "description": "Stores drama entities. Includes drama id as document id.",
-          "params": [
-            {
-              "name": "dramaId",
-              "description": "The unique identifier for the drama."
-            }
-          ]
+          "description": "Stores drama entities. Includes drama id as document id."
         }
       },
       {
@@ -136,15 +127,9 @@
         "definition": {
           "entityName": "Genre",
           "schema": {
-            "$ref": "#/backend/entities/Genre"
+            "$ref": "#/entities/Genre"
           },
-          "description": "Stores genre entities. Includes genre id as document id.",
-          "params": [
-            {
-              "name": "genreId",
-              "description": "The unique identifier for the genre."
-            }
-          ]
+          "description": "Stores genre entities. Includes genre id as document id."
         }
       },
       {
@@ -152,15 +137,9 @@
         "definition": {
           "entityName": "Episode",
           "schema": {
-            "$ref": "#/backend/entities/Episode"
+            "$ref": "#/entities/Episode"
           },
-          "description": "Stores episode entities. Includes episode id as document id.",
-          "params": [
-            {
-              "name": "episodeId",
-              "description": "The unique identifier for the episode."
-            }
-          ]
+          "description": "Stores episode entities. Includes episode id as document id."
         }
       }
     ],
