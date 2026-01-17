@@ -50,6 +50,7 @@ service cloud.firestore {
      * @allow (write) Only signed-in users (admins) can create, update, or delete parts.
      */
     match /parts/{partId} {
+      // Public read access is granted to all users to view episode lists.
       allow read: if true;
       allow write: if isSignedIn();
     }
