@@ -1,7 +1,7 @@
-export type Episode = {
+export type Part = {
   id: string;
   dramaId: string;
-  episodeNumber: number;
+  partNumber: number;
   title: string;
   duration: string;
   description: string;

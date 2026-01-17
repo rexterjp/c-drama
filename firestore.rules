@@ -44,12 +44,12 @@ service cloud.firestore {
     }
 
     /**
-     * @description Rules for the 'episodes' collection.
-     * @path /episodes/{episodeId}
-     * @allow (read) Any user, authenticated or not, can read/list episodes.
-     * @allow (write) Only signed-in users (admins) can create, update, or delete episodes.
+     * @description Rules for the 'parts' collection.
+     * @path /parts/{partId}
+     * @allow (read) Any user, authenticated or not, can read/list parts.
+     * @allow (write) Only signed-in users (admins) can create, update, or delete parts.
      */
-    match /episodes/{episodeId} {
+    match /parts/{partId} {
       allow read: if true;
       allow write: if isSignedIn();
     }

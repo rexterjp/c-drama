@@ -6,7 +6,7 @@ import { useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase
 import { doc, collection, query, where } from 'firebase/firestore';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import type { Drama, Episode } from '@/lib/data';
+import type { Drama, Part } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DramaDetailPage() {
@@ -17,13 +17,13 @@ export default function DramaDetailPage() {
   const dramaRef = useMemoFirebase(() => (firestore && id ? doc(firestore, 'dramas', id) : null), [firestore, id]);
   const { data: drama, isLoading: isDramaLoading } = useDoc<Drama>(dramaRef);
 
-  const episodesQuery = useMemoFirebase(
-    () => (firestore && id ? query(collection(firestore, 'episodes'), where('dramaId', '==', id)) : null),
+  const partsQuery = useMemoFirebase(
+    () => (firestore && id ? query(collection(firestore, 'parts'), where('dramaId', '==', id)) : null),
     [firestore, id]
   );
-  const { data: episodes, isLoading: areEpisodesLoading } = useCollection<Episode>(episodesQuery);
+  const { data: parts, isLoading: arePartsLoading } = useCollection<Part>(partsQuery);
 
-  if (isDramaLoading || areEpisodesLoading) {
+  if (isDramaLoading || arePartsLoading) {
     return (
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid md:grid-cols-3 gap-8 md:gap-12">
@@ -69,36 +69,36 @@ export default function DramaDetailPage() {
           <h1 className="font-headline text-4xl md:text-5xl font-bold mb-8">{drama.title}</h1>
 
           <div>
-            <h2 className="font-headline text-3xl font-bold mb-4">Episode</h2>
-            {episodes && episodes.length > 0 ? (
+            <h2 className="font-headline text-3xl font-bold mb-4">Part</h2>
+            {parts && parts.length > 0 ? (
               <Accordion type="single" collapsible className="w-full">
-                {episodes
-                  .sort((a, b) => a.episodeNumber - b.episodeNumber)
-                  .map((episode) => (
-                    <AccordionItem value={episode.id} key={episode.id}>
+                {parts
+                  .sort((a, b) => a.partNumber - b.partNumber)
+                  .map((part) => (
+                    <AccordionItem value={part.id} key={part.id}>
                       <AccordionTrigger className="text-base">
-                        {`Episode ${episode.episodeNumber}: ${episode.title}`}
-                        <span className="font-normal text-muted-foreground ml-auto mr-4 text-sm">{episode.duration}</span>
+                        {`Part ${part.partNumber}: ${part.title}`}
+                        <span className="font-normal text-muted-foreground ml-auto mr-4 text-sm">{part.duration}</span>
                       </AccordionTrigger>
                       <AccordionContent>
-                        {episode.videoUrl && (
+                        {part.videoUrl && (
                           <div className="aspect-video w-full overflow-hidden rounded-lg shadow-lg mb-4 relative">
                             <iframe
-                              src={episode.videoUrl}
+                              src={part.videoUrl}
                               allowFullScreen
                               className="h-full w-full border-0"
                             ></iframe>
                             <div className="absolute top-0 right-0 h-14 w-16 z-10"></div>
                           </div>
                         )}
-                        <p className="text-muted-foreground">{episode.description}</p>
+                        <p className="text-muted-foreground">{part.description}</p>
                       </AccordionContent>
                     </AccordionItem>
                   ))}
               </Accordion>
             ) : (
               <div className="border-dashed border-2 rounded-lg p-8 text-center">
-                <p className="text-muted-foreground">Belum ada episode yang tersedia.</p>
+                <p className="text-muted-foreground">Belum ada part yang tersedia.</p>
               </div>
             )}
           </div>

@@ -46,41 +46,41 @@
         "name"
       ]
     },
-    "Episode": {
+    "Part": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Episode",
+      "title": "Part",
       "type": "object",
-      "description": "Represents an episode of a drama.",
+      "description": "Represents a part of a drama.",
       "properties": {
         "dramaId": {
           "type": "string",
-          "description": "Reference to Drama. (Relationship: Drama 1:N Episode)"
+          "description": "Reference to Drama. (Relationship: Drama 1:N Part)"
         },
-        "episodeNumber": {
+        "partNumber": {
           "type": "number",
-          "description": "The episode number within the drama."
+          "description": "The part number within the drama."
         },
         "title": {
           "type": "string",
-          "description": "Title of the episode."
+          "description": "Title of the part."
         },
         "videoUrl": {
           "type": "string",
-          "description": "URL of the video file for the episode.",
+          "description": "URL of the video file for the part.",
           "format": "uri"
         },
         "duration": {
           "type": "string",
-          "description": "Duration of the episode (e.g., '45min')."
+          "description": "Duration of the part (e.g., '45min')."
         },
         "description": {
           "type": "string",
-          "description": "A brief summary of the episode."
+          "description": "A brief summary of the part."
         }
       },
       "required": [
         "dramaId",
-        "episodeNumber",
+        "partNumber",
         "title",
         "videoUrl",
         "duration",
@@ -117,16 +117,16 @@
         }
       },
       {
-        "path": "/episodes/{episodeId}",
+        "path": "/parts/{partId}",
         "definition": {
-          "entityName": "Episode",
+          "entityName": "Part",
           "schema": {
-            "$ref": "#/entities/Episode"
+            "$ref": "#/entities/Part"
           },
-          "description": "Stores episode entities. Includes episode id as document id."
+          "description": "Stores part entities. Includes part id as document id."
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to be simple and flat, focusing on optimizing reads for the UI. Given the lack of user-specific data or collaborative features, we can directly use top-level collections for `dramas`, `genres`, and `episodes`. This approach avoids unnecessary nesting and simplifies data access and security rules. This structure is optimized for reading data to populate the UI elements like the homepage carousel, drama grid view, genre filters, and drama details pages. There are no user specific features, so user based collections are not necessary."
+    "reasoning": "The Firestore structure is designed to be simple and flat, focusing on optimizing reads for the UI. Given the lack of user-specific data or collaborative features, we can directly use top-level collections for `dramas`, `genres`, and `parts`. This approach avoids unnecessary nesting and simplifies data access and security rules. This structure is optimized for reading data to populate the UI elements like the homepage carousel, drama grid view, genre filters, and drama details pages. There are no user specific features, so user based collections are not necessary."
   }
 }

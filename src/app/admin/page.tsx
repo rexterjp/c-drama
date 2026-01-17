@@ -33,7 +33,7 @@ function AdminDashboard() {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="dramas">Drama</TabsTrigger>
           <TabsTrigger value="genres">Genre</TabsTrigger>
-          <TabsTrigger value="episodes">Episode</TabsTrigger>
+          <TabsTrigger value="parts">Part</TabsTrigger>
         </TabsList>
         <TabsContent value="dramas" className="mt-6">
           <DramasCrud />
@@ -41,7 +41,7 @@ function AdminDashboard() {
         <TabsContent value="genres" className="mt-6">
           <GenresCrud />
         </TabsContent>
-        <TabsContent value="episodes" className="mt-6">
+        <TabsContent value="parts" className="mt-6">
           <EpisodesCrud />
         </TabsContent>
       </Tabs>
