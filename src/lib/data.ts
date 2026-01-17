@@ -15,8 +15,3 @@ export type Drama = {
   isTrending: boolean;
   isHot: boolean;
 };
-
-export type Genre = {
-  id: string;
-  name: string;
-};

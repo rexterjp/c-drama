@@ -31,21 +31,6 @@
         "isHot"
       ]
     },
-    "Genre": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Genre",
-      "type": "object",
-      "description": "Represents a genre of dramas.",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Name of the genre (e.g., Romance, Historical)."
-        }
-      },
-      "required": [
-        "name"
-      ]
-    },
     "Part": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Part",
@@ -107,16 +92,6 @@
         }
       },
       {
-        "path": "/genres/{genreId}",
-        "definition": {
-          "entityName": "Genre",
-          "schema": {
-            "$ref": "#/entities/Genre"
-          },
-          "description": "Stores genre entities. Includes genre id as document id."
-        }
-      },
-      {
         "path": "/parts/{partId}",
         "definition": {
           "entityName": "Part",
@@ -127,6 +102,6 @@
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to be simple and flat, focusing on optimizing reads for the UI. Given the lack of user-specific data or collaborative features, we can directly use top-level collections for `dramas`, `genres`, and `parts`. This approach avoids unnecessary nesting and simplifies data access and security rules. This structure is optimized for reading data to populate the UI elements like the homepage carousel, drama grid view, genre filters, and drama details pages. There are no user specific features, so user based collections are not necessary."
+    "reasoning": "The Firestore structure is designed to be simple and flat, focusing on optimizing reads for the UI. Given the lack of user-specific data or collaborative features, we can directly use top-level collections for `dramas` and `parts`. This approach avoids unnecessary nesting and simplifies data access and security rules. This structure is optimized for reading data to populate the UI elements like the homepage carousel, drama grid view, and drama details pages. There are no user specific features, so user based collections are not necessary."
   }
 }

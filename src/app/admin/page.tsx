@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import DramasCrud from './dramas-crud';
-import GenresCrud from './genres-crud';
 import PartsCrud from './parts-crud';
 
 function AdminDashboard() {
@@ -30,16 +29,12 @@ function AdminDashboard() {
       </div>
       
       <Tabs defaultValue="dramas" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="dramas">Drama</TabsTrigger>
-          <TabsTrigger value="genres">Genre</TabsTrigger>
           <TabsTrigger value="parts">Part</TabsTrigger>
         </TabsList>
         <TabsContent value="dramas" className="mt-6">
           <DramasCrud />
-        </TabsContent>
-        <TabsContent value="genres" className="mt-6">
-          <GenresCrud />
         </TabsContent>
         <TabsContent value="parts" className="mt-6">
           <PartsCrud />

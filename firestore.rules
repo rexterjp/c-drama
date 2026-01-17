@@ -33,17 +33,6 @@ service cloud.firestore {
     }
 
     /**
-     * @description Rules for the 'genres' collection.
-     * @path /genres/{genreId}
-     * @allow (read) Any user, authenticated or not, can read/list genres.
-     * @allow (write) Only signed-in users (admins) can create, update, or delete genres.
-     */
-    match /genres/{genreId} {
-      allow read: if true;
-      allow write: if isSignedIn();
-    }
-
-    /**
      * @description Rules for the 'parts' collection.
      * @path /parts/{partId}
      * @allow (read) Any user, authenticated or not, can read/list parts.
