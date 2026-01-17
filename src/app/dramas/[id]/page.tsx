@@ -23,7 +23,10 @@ export default function DramaDetailPage() {
   );
   const { data: parts, isLoading: arePartsLoading } = useCollection<Part>(partsQuery);
 
-  if (isDramaLoading || arePartsLoading) {
+  // Wait for the ID to be available from params, in addition to data loading.
+  const isLoading = !id || isDramaLoading || arePartsLoading;
+
+  if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid md:grid-cols-3 gap-8 md:gap-12">
@@ -44,6 +47,7 @@ export default function DramaDetailPage() {
     );
   }
 
+  // Only if loading is complete and we still don't have a drama, then it's a 404.
   if (!drama) {
     notFound();
   }
