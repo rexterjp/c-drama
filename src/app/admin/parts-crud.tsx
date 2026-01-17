@@ -17,11 +17,79 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { PlusCircle, Edit, Trash2, Check, ChevronsUpDown } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
+
+function DramaPickerDialog({
+  isOpen,
+  onClose,
+  dramas,
+  onSelectDrama,
+  currentDramaId
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  dramas: Drama[];
+  onSelectDrama: (id: string) => void;
+  currentDramaId: string | undefined;
+}) {
+  const [search, setSearch] = useState('');
+
+  const filteredDramas = useMemo(() => {
+    if (!search) return dramas;
+    return dramas.filter(d => d.title.toLowerCase().includes(search.toLowerCase()));
+  }, [dramas, search]);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Pilih Drama</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4">
+            <Input 
+                placeholder="Cari drama..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="h-10"
+            />
+            <ScrollArea className="h-72 rounded-md border">
+                <div className="p-2">
+                    {filteredDramas.length > 0 ? filteredDramas.map((drama) => (
+                        <Button
+                            variant="ghost"
+                            key={drama.id}
+                            onClick={() => {
+                                onSelectDrama(drama.id);
+                                onClose();
+                            }}
+                            className={cn(
+                                "w-full justify-start text-left font-normal",
+                                currentDramaId === drama.id && "bg-accent"
+                            )}
+                        >
+                            <Check
+                                className={cn(
+                                "mr-2 h-4 w-4",
+                                currentDramaId === drama.id ? "opacity-100" : "opacity-0"
+                                )}
+                            />
+                            {drama.title}
+                        </Button>
+                    )) : <p className="p-2 text-center text-sm text-muted-foreground">Drama tidak ditemukan.</p>}
+                </div>
+            </ScrollArea>
+        </div>
+        <DialogFooter>
+            <Button variant="outline" onClick={onClose}>Batal</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 
 const partSchema = z.object({
   dramaId: z.string().min(1, 'Drama harus diisi'),
@@ -36,13 +104,7 @@ function PartForm({ part, dramas, onFinished }: { part?: Part, dramas: Drama[], 
   const firestore = useFirestore();
   const { toast } = useToast();
   const partsCollection = useMemoFirebase(() => collection(firestore, 'parts'), [firestore]);
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState('');
-
-  const filteredDramas = useMemo(() => {
-    if (!search) return dramas;
-    return dramas.filter(d => d.title.toLowerCase().includes(search.toLowerCase()));
-  }, [dramas, search]);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   const form = useForm<z.infer<typeof partSchema>>({
     resolver: zodResolver(partSchema),
@@ -81,58 +143,35 @@ function PartForm({ part, dramas, onFinished }: { part?: Part, dramas: Drama[], 
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Drama</FormLabel>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <FormControl>
+              <FormControl>
+                <>
                     <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-full justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? dramas.find(
-                            (drama) => drama.id === field.value
-                          )?.title
-                        : "Pilih drama"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsPickerOpen(true)}
+                        className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                        )}
+                        >
+                        {field.value
+                            ? dramas.find(
+                                (drama) => drama.id === field.value
+                            )?.title
+                            : "Pilih drama"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-                    <Input 
-                        placeholder="Cari drama..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="h-9 rounded-b-none border-x-0 border-t-0"
+                    <DramaPickerDialog 
+                        isOpen={isPickerOpen}
+                        onClose={() => setIsPickerOpen(false)}
+                        dramas={dramas}
+                        currentDramaId={field.value}
+                        onSelectDrama={(dramaId) => {
+                            field.onChange(dramaId)
+                        }}
                     />
-                    <ScrollArea className="h-72">
-                        {filteredDramas.map((drama) => (
-                            <button
-                                type="button"
-                                key={drama.id}
-                                onClick={() => {
-                                    field.onChange(drama.id);
-                                    setOpen(false);
-                                    setSearch('');
-                                }}
-                                className="text-sm p-2 rounded-sm hover:bg-accent cursor-pointer flex items-center w-full text-left justify-start font-normal"
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  drama.id === field.value ? "opacity-100" : "opacity-0"
-                                )}
-                              />
-                              {drama.title}
-                            </button>
-                        ))}
-                        {!filteredDramas.length && <p className="p-2 text-center text-sm text-muted-foreground">Drama tidak ditemukan.</p>}
-                    </ScrollArea>
-                </PopoverContent>
-              </Popover>
+                </>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
