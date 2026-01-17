@@ -23,8 +23,7 @@ export default function DramaDetailPage() {
   );
   const { data: parts, isLoading: arePartsLoading } = useCollection<Part>(partsQuery);
 
-  // Wait for the ID to be available from params, in addition to data loading.
-  const isLoading = !id || isDramaLoading || arePartsLoading;
+  const isLoading = isDramaLoading || arePartsLoading;
 
   if (isLoading) {
     return (
