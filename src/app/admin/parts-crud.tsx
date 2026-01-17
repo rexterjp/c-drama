@@ -21,6 +21,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { PlusCircle, Edit, Trash2, Check, ChevronsUpDown } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 function DramaPickerDialog({
   isOpen,
@@ -210,10 +211,27 @@ export default function PartsCrud() {
   const dramasCollection = useMemoFirebase(() => collection(firestore, 'dramas'), [firestore]);
   const { data: dramas, isLoading: dramasLoading } = useCollection<Drama>(dramasCollection);
   
-  const dramaTitleMap = useMemo(() => {
-      if (!dramas) return new Map();
-      return new Map(dramas.map(d => [d.id, d.title]));
-  }, [dramas])
+  const groupedParts = useMemo(() => {
+    if (!parts || !dramas) return new Map<string, { dramaTitle: string; parts: Part[] }>();
+
+    const dramaMap = new Map(dramas.map(d => [d.id, d.title]));
+    const groups = new Map<string, { dramaTitle: string; parts: Part[] }>();
+
+    parts.forEach(part => {
+        const dramaTitle = dramaMap.get(part.dramaId) || 'Drama Tidak Dikenal';
+        if (!groups.has(part.dramaId)) {
+            groups.set(part.dramaId, { dramaTitle, parts: [] });
+        }
+        groups.get(part.dramaId)!.parts.push(part);
+    });
+
+    groups.forEach(group => {
+      group.parts.sort((a, b) => a.partNumber - b.partNumber);
+    });
+    
+    return new Map([...groups.entries()].sort((a, b) => a[1].dramaTitle.localeCompare(b[1].dramaTitle)));
+  }, [parts, dramas]);
+  
 
   const handleEdit = (part: Part) => {
     setEditingPart(part);
@@ -239,8 +257,12 @@ export default function PartsCrud() {
   if (partsLoading || dramasLoading) {
     return (
       <div className="space-y-4">
-        <Skeleton className="h-10 w-40" />
-        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-10 w-40 self-end" />
+        <div className="space-y-2">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+        </div>
       </div>
     )
   }
@@ -260,54 +282,65 @@ export default function PartsCrud() {
         </Dialog>
       </div>
       
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Drama</TableHead>
-              <TableHead>Part #</TableHead>
-              <TableHead>Judul</TableHead>
-              <TableHead>Durasi</TableHead>
-              <TableHead className="text-right">Aksi</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {parts && parts.length > 0 ? parts.sort((a,b) => a.partNumber - b.partNumber).map((part) => (
-              <TableRow key={part.id}>
-                <TableCell className="font-medium">{dramaTitleMap.get(part.dramaId) || 'Drama Tidak Dikenal'}</TableCell>
-                <TableCell>{part.partNumber}</TableCell>
-                <TableCell>{part.title}</TableCell>
-                <TableCell>{part.duration}</TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="icon" onClick={() => handleEdit(part)}><Edit className="h-4 w-4" /></Button>
-                  
-                  <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                          <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                          <AlertDialogHeader>
-                              <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                  Tindakan ini tidak dapat dibatalkan. Ini akan menghapus part {part.partNumber} dari "{dramaTitleMap.get(part.dramaId)}" secara permanen.
-                              </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                              <AlertDialogCancel>Batal</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDelete(part)}>Hapus</AlertDialogAction>
-                          </AlertDialogFooter>
-                      </AlertDialogContent>
-                  </AlertDialog>
-                </TableCell>
-              </TableRow>
-            )) : (
-                <TableRow>
-                    <TableCell colSpan={5} className="text-center">Tidak ada part ditemukan.</TableCell>
-                </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      {groupedParts.size > 0 ? (
+        <Accordion type="multiple" className="w-full space-y-4">
+            {Array.from(groupedParts.entries()).map(([dramaId, groupData]) => (
+                <AccordionItem value={dramaId} key={dramaId} className="border rounded-lg bg-card">
+                    <AccordionTrigger className="px-4 py-3 text-lg font-semibold hover:no-underline">
+                        {groupData.dramaTitle}
+                    </AccordionTrigger>
+                    <AccordionContent className="px-1 pb-1">
+                        <div className="rounded-md border-t">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[100px]">Part #</TableHead>
+                                        <TableHead>Judul</TableHead>
+                                        <TableHead className="w-[120px]">Durasi</TableHead>
+                                        <TableHead className="text-right w-[100px]">Aksi</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {groupData.parts.map((part) => (
+                                        <TableRow key={part.id}>
+                                            <TableCell>{part.partNumber}</TableCell>
+                                            <TableCell className="font-medium">{part.title}</TableCell>
+                                            <TableCell>{part.duration}</TableCell>
+                                            <TableCell className="text-right">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEdit(part)}><Edit className="h-4 w-4" /></Button>
+                                            
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            Tindakan ini tidak dapat dibatalkan. Ini akan menghapus part {part.partNumber} dari "{groupData.dramaTitle}" secara permanen.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                        <AlertDialogAction onClick={() => handleDelete(part)}>Hapus</AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+            ))}
+        </Accordion>
+      ) : (
+        <div className="border-dashed border-2 rounded-lg p-8 text-center mt-4">
+            <p className="text-muted-foreground">Tidak ada part ditemukan.</p>
+        </div>
+      )}
     </div>
   );
 }
