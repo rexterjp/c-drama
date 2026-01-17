@@ -4,99 +4,54 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     /**
-     * Core Philosophy: This ruleset establishes a "Public Read-Only" security model.
-     * The application's purpose is to display a catalog of dramas, genres, and
-     * episodes to all users, similar to a media guide. There are no user accounts,
-     * user-generated content, or private data. Therefore, all data is publicly
-     * readable by any client, but all write operations (create, update, delete)
-     * are disabled from the client-side to protect the integrity of the catalog.
-     * All content is expected to be managed by administrators, either through the
-     * Firebase Console or a trusted server environment.
-     *
-     * Data Structure: The data is organized into three distinct, top-level
-     * collections: /dramas, /genres, and /episodes. This flat structure is simple
-     * and performant for the read-heavy nature of the application, allowing UIs
-     * to easily fetch lists of dramas, filter by genre, or load episodes for a
-     * specific drama without complex queries or joins.
-     *
-     * Key Security Decisions:
-     * - Public Read Access: All collections are world-readable to anyone,
-     *   including unauthenticated users. This is intentional and necessary for the
-     *   app's function as a public catalog.
-     * - Global Write Lock: All client-side write operations are explicitly
-     *   denied (`if false;`). This is the most critical security decision,
-     *   ensuring that application users cannot modify or delete the catalog data.
-     * - No User-Specific Logic: The rules contain no logic related to user
-     *   authentication (`request.auth`) for permissions, as the data model does
-     *   not include any user-specific information or ownership.
-     *
-     * Denormalization for Authorization: Not applicable in this model. Since there are
-     * no authorization decisions to be made (all reads are public, all writes are
-     * denied), there is no need to denormalize ownership or role data.
-     *
-     * Structural Segregation: Not applicable. The application data is entirely
-     * public, so there is no need to segregate public and private content into
-     * different collections.
+     * Core Philosophy: This ruleset establishes a "Public Read / Admin Write" model.
+     * The application's purpose is to display a catalog of dramas, which is public.
+     * All write operations (create, update, delete) are restricted to authenticated
+     * users (admins) to protect data integrity.
      */
 
     // Helper Functions
-
     /**
      * isSignedIn
      * @description Checks if a user is authenticated.
      * @returns {boolean} True if the user has a valid auth object.
      */
-    // function isSignedIn() {
-    //   return request.auth != null;
-    // }
+    function isSignedIn() {
+      return request.auth != null;
+    }
 
 
     /**
      * @description Rules for the 'dramas' collection.
      * @path /dramas/{dramaId}
-     * @allow (get) Any user, authenticated or not, can read a single drama document.
-     * @allow (list) Any user, authenticated or not, can list all drama documents.
-     * @deny (create, update, delete) No user can create, modify, or delete drama documents from the client.
-     * @principle Establishes the collection as public, read-only content. Data integrity is protected by disallowing all client-side writes.
+     * @allow (read) Any user, authenticated or not, can read/list dramas.
+     * @allow (write) Only signed-in users (admins) can create, update, or delete dramas.
      */
     match /dramas/{dramaId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     /**
      * @description Rules for the 'genres' collection.
      * @path /genres/{genreId}
-     * @allow (get) Any user, authenticated or not, can read a single genre document.
-     * @allow (list) Any user, authenticated or not, can list all genre documents for UI filtering.
-     * @deny (create, update, delete) No user can create, modify, or delete genre documents from the client.
-     * @principle Establishes the collection as public, read-only content. Data integrity is protected by disallowing all client-side writes.
+     * @allow (read) Any user, authenticated or not, can read/list genres.
+     * @allow (write) Only signed-in users (admins) can create, update, or delete genres.
      */
     match /genres/{genreId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     /**
      * @description Rules for the 'episodes' collection.
      * @path /episodes/{episodeId}
-     * @allow (get) Any user, authenticated or not, can read a single episode document.
-     * @allow (list) Any user, authenticated or not, can list all episode documents.
-     * @deny (create, update, delete) No user can create, modify, or delete episode documents from the client.
-     * @principle Establishes the collection as public, read-only content. Data integrity is protected by disallowing all client-side writes.
+     * @allow (read) Any user, authenticated or not, can read/list episodes.
+     * @allow (write) Only signed-in users (admins) can create, update, or delete episodes.
      */
     match /episodes/{episodeId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow read: if true;
+      allow write: if isSignedIn();
     }
   }
 }
