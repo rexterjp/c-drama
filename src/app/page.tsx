@@ -19,7 +19,7 @@ function Hero() {
           Welcome to C-Pop Now
         </h1>
         <p className="text-muted-foreground text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-          This platform is a personal project by <span className="text-foreground font-semibold">Candra Pramudya Arunit</span>, created to share the best of Chinese dramas with the world.
+          This platform is a personal project by <span className="text-foreground font-semibold">Candra Pramudya Arunita</span>, created to share the best of Chinese dramas with the world.
         </p>
         <div className="flex justify-center gap-4">
           <Button asChild size="lg" className="h-12 text-lg rounded-full" variant="outline">
