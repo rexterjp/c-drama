@@ -14,19 +14,19 @@ export default function RequestPage() {
       </p>
       <div className="flex flex-wrap justify-center gap-4">
         <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#E4405F] hover:bg-[#E4405F]/90 text-white">
-          <Link href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+          <Link href="https://www.instagram.com/candra.pramudya.arunita" target="_blank" rel="noopener noreferrer">
             <InstagramIcon className="mr-2 h-5 w-5" />
             Instagram
           </Link>
         </Button>
         <Button asChild size="lg" className="h-12 text-lg rounded-full bg-black hover:bg-black/90 text-white">
-          <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+          <Link href="https://twitter.com/0xjson000" target="_blank" rel="noopener noreferrer">
             <Twitter className="mr-2 h-5 w-5" />
             X / Twitter
           </Link>
         </Button>
         <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#0088cc] hover:bg-[#0088cc]/90 text-white">
-          <Link href="https://telegram.org" target="_blank" rel="noopener noreferrer">
+          <Link href="https://t.me/candra_huang" target="_blank" rel="noopener noreferrer">
             <Send className="mr-2 h-5 w-5" />
             Telegram
           </Link>
