@@ -21,10 +21,10 @@ function Hero() {
     <section className="w-full">
       <div className="container mx-auto px-4 py-16 md:py-32 text-center">
         <h1 className="font-headline text-4xl md:text-6xl font-bold text-foreground leading-tight mb-4">
-          Selamat Datang di C-Pop Now
+          Selamat Datang di C-Drama
         </h1>
         <p className="text-muted-foreground text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-          Platform ini adalah proyek pribadi oleh <span className="text-foreground font-semibold">Candra Pramudya Arunita</span>, dibuat untuk membagikan drama China terbaik kepada dunia.
+          Platform ini adalah proyek pribadi oleh <span className="text-foreground font-semibold">Candra Pramudya Arunita</span>, dibuat untuk membagikan short drama terbaik kepada dunia.
         </p>
         <div className="flex justify-center gap-4">
           <Button asChild size="lg" className="h-12 text-lg rounded-full bg-[#E4405F] hover:bg-[#E4405F]/90 text-white">

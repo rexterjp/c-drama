@@ -7,8 +7,8 @@ import Footer from '@/components/layout/footer';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
-  title: 'C-Pop Now',
-  description: 'Portal Anda untuk drama China terbaik.',
+  title: 'C-Drama',
+  description: 'Portal Anda untuk short drama terbaik.',
 };
 
 export default function RootLayout({

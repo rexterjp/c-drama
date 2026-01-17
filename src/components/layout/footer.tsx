@@ -10,13 +10,13 @@ export default function Footer() {
             <Link href="/" className="inline-block mb-2">
               <Image
                 src="https://i.ibb.co/wF450cnb/unnamed-2.png"
-                alt="C-Pop Now Logo"
-                width={120}
-                height={30}
-                className="h-20 w-auto"
+                alt="C-Drama Logo"
+                width={200}
+                height={50}
+                className="h-[120px] w-auto"
               />
             </Link>
-            <p className="text-sm">Portal Anda untuk drama China terbaik.</p>
+            <p className="text-sm">Portal Anda untuk short drama terbaik.</p>
           </div>
           <div className="flex gap-6">
             <Link href="/" className="text-sm hover:underline hover:text-foreground">Beranda</Link>
@@ -25,7 +25,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="text-center mt-8 border-t pt-8">
-          <p className="text-sm">&copy; {new Date().getFullYear()} C-Pop Now. Hak Cipta Dilindungi.</p>
+          <p className="text-sm">&copy; {new Date().getFullYear()} C-Drama. Hak Cipta Dilindungi.</p>
         </div>
       </div>
     </footer>

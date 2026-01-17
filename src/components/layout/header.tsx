@@ -99,11 +99,11 @@ export default function Header() {
         <Link href="/">
           <Image
             src="https://i.ibb.co/wF450cnb/unnamed-2.png"
-            alt="C-Pop Now Logo"
-            width={160}
-            height={40}
+            alt="C-Drama Logo"
+            width={200}
+            height={50}
             priority
-            className="h-24 w-auto"
+            className="h-[120px] w-auto"
           />
         </Link>
 
