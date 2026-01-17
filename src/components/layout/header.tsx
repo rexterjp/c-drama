@@ -95,7 +95,7 @@ export default function Header() {
   
   return (
     <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-sm border-b">
-      <div className="container mx-auto h-20 flex items-center justify-between px-4">
+      <div className="container mx-auto h-28 flex items-center justify-between px-4">
         <Link href="/">
           <Image
             src="https://i.ibb.co/wF450cnb/unnamed-2.png"
@@ -103,7 +103,7 @@ export default function Header() {
             width={160}
             height={40}
             priority
-            className="h-12 w-auto"
+            className="h-24 w-auto"
           />
         </Link>
 
