@@ -2,6 +2,13 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type GenreFiltersProps = {
@@ -10,28 +17,43 @@ type GenreFiltersProps = {
 
 export default function GenreFilters({ genres }: GenreFiltersProps) {
   const [activeGenre, setActiveGenre] = useState('All');
-
-  const allGenres = ['All', ...genres];
+  const mainGenres = ['All', ...genres.slice(0, 3)];
+  const moreGenres = genres.slice(3);
 
   return (
     <div className="mb-8">
-      <div className="flex space-x-2 overflow-x-auto pb-4 -mx-4 px-4">
-        {allGenres.map((genre) => (
+      <div className="flex items-center gap-2">
+        {mainGenres.map((genre) => (
           <Button
             key={genre}
             onClick={() => setActiveGenre(genre)}
-            variant="outline"
-            size="lg"
+            variant={activeGenre === genre ? "default" : "outline"}
+            size="sm"
             className={cn(
-              'h-12 min-w-24 whitespace-nowrap border-2 border-black shadow-hard-sm text-base font-bold hover:bg-secondary focus:bg-secondary',
-              activeGenre === genre
-                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                : 'bg-background'
+              'rounded-full h-9 shadow-sm',
+              activeGenre !== genre && 'bg-background'
             )}
           >
             {genre}
           </Button>
         ))}
+        {moreGenres.length > 0 && (
+           <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="rounded-full h-9 shadow-sm bg-background">
+                More
+                <ChevronDown className="h-4 w-4 ml-1" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {moreGenres.map((genre) => (
+                <DropdownMenuItem key={genre} onSelect={() => setActiveGenre(genre)}>
+                  {genre}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </div>
   );

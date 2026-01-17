@@ -4,77 +4,35 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --background: 36 25% 96%;
+    --foreground: 0 0% 11%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card: 36 25% 96%;
+    --card-foreground: 0 0% 11%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover: 36 25% 96%;
+    --popover-foreground: 0 0% 11%;
 
-    --primary: 0 69.4% 35.9%;
+    --primary: 352 82% 38%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 45 88.9% 61.6%;
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 42 69% 70%;
+    --secondary-foreground: 0 0% 11%;
 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 42%;
 
-    --accent: 45 88.9% 61.6%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 42 69% 70%;
+    --accent-foreground: 0 0% 11%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 352 82% 38%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 0%;
-    --input: 0 0% 100%;
-    --ring: 45 88.9% 61.6%;
+    --border: 0 0% 87%;
+    --input: 0 0% 93%;
+    --ring: 352 82% 38%;
 
-    --radius: 0rem;
-    
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-  }
-
-  .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-
-    --card: 0 0% 0%;
-    --card-foreground: 0 0% 100%;
-
-    --popover: 0 0% 0%;
-    --popover-foreground: 0 0% 100%;
-
-    --primary: 0 69.4% 35.9%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 45 88.9% 61.6%;
-    --secondary-foreground: 0 0% 0%;
-
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-
-    --accent: 45 88.9% 61.6%;
-    --accent-foreground: 0 0% 0%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 100%;
-    --input: 0 0% 0%;
-    --ring: 45 88.9% 61.6%;
-    
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --radius: 0.5rem;
   }
 }
 
@@ -85,5 +43,15 @@
   body {
     @apply bg-background text-foreground;
     min-width: 360px;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

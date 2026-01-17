@@ -5,9 +5,6 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from '@/components/ui/badge';
 import StarIcon from '@/components/icons/star-icon';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
 
 type DramaDetailPageProps = {
   params: {
@@ -29,7 +26,7 @@ export default function DramaDetailPage({ params }: DramaDetailPageProps) {
       <div className="grid md:grid-cols-3 gap-8 md:gap-12">
         <div className="md:col-span-1">
           {poster && (
-            <div className="border-2 border-black shadow-hard-lg">
+            <div className="rounded-lg overflow-hidden shadow-lg">
               <Image
                 src={poster.imageUrl}
                 alt={`Poster for ${drama.title}`}
@@ -45,55 +42,44 @@ export default function DramaDetailPage({ params }: DramaDetailPageProps) {
         <div className="md:col-span-2">
           <div className="flex flex-wrap gap-2 mb-4">
             {drama.genre.map((g) => (
-              <Badge key={g} variant="outline" className="border-2 border-black text-sm">{g}</Badge>
+              <Badge key={g} variant="secondary" className="text-sm">{g}</Badge>
             ))}
           </div>
-          <h1 className="font-headline text-4xl md:text-6xl uppercase font-bold mb-4">{drama.title}</h1>
+          <h1 className="font-headline text-4xl md:text-5xl font-bold mb-4">{drama.title}</h1>
           
           <div className="flex items-center gap-2 mb-6">
             <div className="flex items-center gap-1">
               {Array.from({ length: 5 }).map((_, i) => (
-                <StarIcon key={i} className={`w-8 h-8 ${i < drama.rating ? 'text-secondary' : 'text-muted'}`} />
+                <StarIcon key={i} className={`w-7 h-7 ${i < drama.rating ? 'text-secondary' : 'text-muted-foreground/30'}`} />
               ))}
             </div>
-            <p className="font-bold text-2xl">{drama.rating.toFixed(1)}</p>
+            <p className="font-bold text-xl">{drama.rating.toFixed(1)}</p>
           </div>
 
-          <Collapsible className="mb-8">
-            <p className="text-lg leading-relaxed">
-              {drama.synopsis.substring(0, 150)}
-              <CollapsibleTrigger asChild>
-                <Button variant="link" className="p-1 text-lg font-bold">
-                  ...Read More
-                  <ChevronDown className="h-4 w-4 ml-1"/>
-                </Button>
-              </CollapsibleTrigger>
-            </p>
-            <CollapsibleContent>
-              <p className="text-lg leading-relaxed mt-2">
-                {drama.synopsis.substring(150)}
-              </p>
-            </CollapsibleContent>
-          </Collapsible>
+          <p className="text-lg leading-relaxed text-muted-foreground mb-8">
+            {drama.synopsis}
+          </p>
 
           <div className="mb-8">
-            <h2 className="font-headline text-3xl uppercase mb-4">Episodes</h2>
+            <h2 className="font-headline text-3xl font-bold mb-4">Episodes</h2>
             {drama.episodes.length > 0 ? (
             <Accordion type="single" collapsible className="w-full">
               {drama.episodes.map((episode) => (
                 <AccordionItem value={episode.id} key={episode.id}>
-                  <AccordionTrigger>
+                  <AccordionTrigger className="text-base">
                     {episode.title}
                     <span className="font-normal text-muted-foreground ml-auto mr-4 text-sm">{episode.duration}</span>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p>{episode.description}</p>
+                    <p className="text-muted-foreground">{episode.description}</p>
                   </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
             ) : (
-                <p className="text-muted-foreground border-2 border-dashed border-black p-8 text-center">No episodes available yet.</p>
+                <div className="border-dashed border-2 rounded-lg p-8 text-center">
+                    <p className="text-muted-foreground">No episodes available yet.</p>
+                </div>
             )}
           </div>
         </div>
