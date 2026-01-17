@@ -23,7 +23,18 @@ export default function DramaDetailPage() {
   );
   const { data: parts, isLoading: arePartsLoading } = useCollection<Part>(partsQuery);
 
-  const isLoading = isDramaLoading || arePartsLoading;
+  const isLoading = !id || isDramaLoading || arePartsLoading;
+
+  const getEmbedUrl = (url: string) => {
+    if (typeof url !== 'string') {
+      return '';
+    }
+    const fileIdMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (url.includes('drive.google.com') && fileIdMatch && fileIdMatch[1]) {
+      return `https://drive.google.com/file/d/${fileIdMatch[1]}/preview`;
+    }
+    return url;
+  };
 
   if (isLoading) {
     return (
@@ -46,7 +57,6 @@ export default function DramaDetailPage() {
     );
   }
 
-  // Only if loading is complete and we still don't have a drama, then it's a 404.
   if (!drama) {
     notFound();
   }
@@ -87,7 +97,7 @@ export default function DramaDetailPage() {
                         {part.videoUrl && (
                           <div className="aspect-video w-full overflow-hidden rounded-lg shadow-lg mb-4 relative">
                             <iframe
-                              src={part.videoUrl}
+                              src={getEmbedUrl(part.videoUrl)}
                               allowFullScreen
                               className="h-full w-full border-0"
                             ></iframe>
