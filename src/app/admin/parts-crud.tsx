@@ -110,10 +110,10 @@ function PartForm({ part, dramas, onFinished }: { part?: Part, dramas: Drama[], 
                     />
                     <ScrollArea className="h-72">
                         {filteredDramas.map((drama) => (
-                            <button
-                                type="button"
+                            <div
                                 key={drama.id}
-                                onClick={() => {
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
                                     field.onChange(drama.id);
                                     setOpen(false);
                                     setSearch('');
@@ -127,7 +127,7 @@ function PartForm({ part, dramas, onFinished }: { part?: Part, dramas: Drama[], 
                                 )}
                               />
                               {drama.title}
-                            </button>
+                            </div>
                         ))}
                         {!filteredDramas.length && <p className="p-2 text-center text-sm text-muted-foreground">Drama tidak ditemukan.</p>}
                     </ScrollArea>
