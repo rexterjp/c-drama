@@ -1,0 +1,169 @@
+{
+  "entities": {
+    "Drama": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Drama",
+      "type": "object",
+      "description": "Represents a Chinese drama.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Drama entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the drama."
+        },
+        "posterUrl": {
+          "type": "string",
+          "description": "URL of the drama's poster image.",
+          "format": "uri"
+        },
+        "synopsis": {
+          "type": "string",
+          "description": "A brief summary of the drama's plot."
+        },
+        "rating": {
+          "type": "number",
+          "description": "The drama's rating (e.g., out of 5 stars)."
+        },
+        "genreIds": {
+          "type": "array",
+          "description": "References to Genres. (Relationship: Drama N:N Genre)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "episodeIds": {
+          "type": "array",
+          "description": "References to Episodes. (Relationship: Drama 1:N Episode)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "posterUrl",
+        "synopsis",
+        "rating"
+      ]
+    },
+    "Genre": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Genre",
+      "type": "object",
+      "description": "Represents a genre of dramas.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Genre entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the genre (e.g., Romance, Historical)."
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Episode": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Episode",
+      "type": "object",
+      "description": "Represents an episode of a drama.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Episode entity."
+        },
+        "dramaId": {
+          "type": "string",
+          "description": "Reference to Drama. (Relationship: Drama 1:N Episode)"
+        },
+        "episodeNumber": {
+          "type": "number",
+          "description": "The episode number within the drama."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the episode."
+        },
+        "videoUrl": {
+          "type": "string",
+          "description": "URL of the video file for the episode.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "dramaId",
+        "episodeNumber",
+        "title",
+        "videoUrl"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/dramas/{dramaId}",
+        "definition": {
+          "entityName": "Drama",
+          "schema": {
+            "$ref": "#/backend/entities/Drama"
+          },
+          "description": "Stores drama entities. Includes drama id as document id.",
+          "params": [
+            {
+              "name": "dramaId",
+              "description": "The unique identifier for the drama."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/genres/{genreId}",
+        "definition": {
+          "entityName": "Genre",
+          "schema": {
+            "$ref": "#/backend/entities/Genre"
+          },
+          "description": "Stores genre entities. Includes genre id as document id.",
+          "params": [
+            {
+              "name": "genreId",
+              "description": "The unique identifier for the genre."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/episodes/{episodeId}",
+        "definition": {
+          "entityName": "Episode",
+          "schema": {
+            "$ref": "#/backend/entities/Episode"
+          },
+          "description": "Stores episode entities. Includes episode id as document id.",
+          "params": [
+            {
+              "name": "episodeId",
+              "description": "The unique identifier for the episode."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to be simple and flat, focusing on optimizing reads for the UI. Given the lack of user-specific data or collaborative features, we can directly use top-level collections for `dramas`, `genres`, and `episodes`. This approach avoids unnecessary nesting and simplifies data access and security rules. This structure is optimized for reading data to populate the UI elements like the homepage carousel, drama grid view, genre filters, and drama details pages. There are no user specific features, so user based collections are not necessary."
+  }
+}
